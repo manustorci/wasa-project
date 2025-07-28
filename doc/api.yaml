@@ -1,9 +1,10 @@
 openapi: 3.0.3 
+servers:
+  - url: "http://localhost:3000"
 info:
-  title: Simplified login API specification description: |-
-    This OpenAPI document describes the simplified login API.
-    Copy and paste the API from the paths key to your OpenAPI document.
-  version: "1"
+  title: WASAText API
+  description: WASAText - Messaging app API spec for WASA course
+  version: "1.0.0"
 paths:
   /session:
     post:
@@ -27,8 +28,7 @@ paths:
                   pattern: '^.*?$'
                   minLength: 3
                   maxLength: 16
-              required:
-                - name
+        required: true
       responses:
         '201':
           description: User log-in action successful
@@ -41,4 +41,179 @@ paths:
                     type: string
                     example: "abcdef012345"
 
-      
+  /me/username:
+    put:
+      tags: ["profile"]
+      operationId: setMyUserName
+      summary: Change user display name
+      description: Change your display name
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "NewName"
+      responses:
+        '200':
+          description: Name changed successfully
+        '401':
+          description: Unauthorized #Token assente
+        '404':
+          description: Not found #Utente non esiste
+        '400':
+          description: Bad request #Name mancante
+ 
+  /me/photo:
+    put:
+      tags: ["profile"]
+      operationId: setMyPhoto
+      summary: Upload or update user profile photo 
+      security: 
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: 
+              type: object
+              properties:
+                photo:
+                  type: string 
+                  format: binary
+      responses:
+        '200':
+          description: Photo uploaded
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request       
+
+  /me/conversations:
+    get:
+      tags: ["conversations"]
+      operationId: getMyConversations
+      summary: Get all conversations for the current user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of conversations returned 
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request
+  
+  /conversations/{id}:
+    get:
+      tags: ["conversations"]
+      operationId: getConversation 
+      summary: Get full conversation by id
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: conversation returned 
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request
+
+  /conversations/{id}/messages:
+    post:
+      tags: ["messages"]
+      operationId: sendMessage
+      summary: Send a new message
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+              properties:
+                text:
+                  type: string
+                  example: "Hey, how you doin?"
+                timestamp:
+                  type: string
+                  format: date-time
+                  example: "2025-07-28T15:45:00Z"
+      responses:
+        '201':
+          description: Message sent
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request
+  
+  /messages/{id}/forward:
+    post:
+      tags: ["messages"]
+      operationId: forwardMessage
+      summary: Forward a message to another conversation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string    
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - conversationId
+              properties:
+                conversationId:
+                  type: string
+                  example: "124u8429djnkf"
+      responses:
+        '200':
+          description: Message forwarded
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Unique user identifier returned at login
