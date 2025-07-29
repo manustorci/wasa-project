@@ -184,7 +184,7 @@ paths:
                 messages:
                   - sender: "Maria"
                     text: "Ciao"
-                    timestamp: "2025-07-28T12:00:00Z"
+                    timestamp: "1969-01-01T00:00:00Z"
         '401':
             { $ref: '#/components/responses/Unauthorized' }
         '404':
@@ -222,7 +222,7 @@ paths:
                 timestamp:
                   type: string
                   format: date-time
-                  example: "2025-07-28T15:45:00Z"
+                  example: "2000-01-01T00:00:00Z"
       responses:
         '201':
           description: Message sent
