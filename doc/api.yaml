@@ -148,6 +148,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Unique identifier of the resource
       responses:
         '200':
           description: conversation returned 
@@ -155,6 +156,28 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: string
+                    description: Conversation id 
+                  partecipants:
+                    type: array
+                    items:
+                      type: string
+                      description: Names of partecipants
+                  messages:
+                    type: array
+                    description: List of messages
+                    items:
+                      type: object
+                      properties:
+                        sender:
+                          type: string
+                        text: 
+                          type: string
+                        timestamp:
+                          type: string
+                          format: date-time
               example:
                 id: "emanuele99"
                 partecipants: ["Marco", "Maria"]
@@ -182,6 +205,8 @@ paths:
           required: true
           schema:
             type: string
+          description: Unique identifier 
+
       requestBody:
         required: true
         content: 
@@ -205,6 +230,11 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  messageId:
+                    type: string
+                  status:
+                    type: string
               example:
                 messageId: "msg123"
                 status: "sent"
@@ -227,7 +257,9 @@ paths:
           in: path
           required: true
           schema:
-            type: string    
+            type: string   
+          description: Unique identifier of the resource
+          
       requestBody:
         required: true
         content:
@@ -263,6 +295,8 @@ paths:
           required: true
           schema: 
             type: string
+          description: Unique identifier of the resource
+
       responses:
         '200':
           description: Comment added
@@ -270,6 +304,11 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  commentId:
+                    type: string
+                  status:
+                    type: string 
               example:
                 commentId: "cmt001"
                 status: "ok"
@@ -291,6 +330,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Unique identifier of the resource
       responses:
           '200':
             description: Comment removed
@@ -314,6 +354,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Unique identifier of the resource
       responses:
         '200':
           description: Message deleted
@@ -337,6 +378,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Unique identifier of the resource
       responses:
         '200':
           description: User added to a group
@@ -358,6 +400,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Unique identifier of the resource
       responses:
         '200':
           description: Left group
@@ -381,6 +424,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Unique identifier of the resource
       responses:
         '200':
           description: User added to a group
@@ -429,12 +473,44 @@ components:
   responses:
     Unauthorized:
       description: The access token is missing or it's expired
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not authorized"
     BadRequest:
       description: The request was not compliant with the documentation (e.g., missing fields, etc.)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Bad request"
     NotFound:
       description: The requested resource was not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not found"
     Forbidden:
       description: You are not allowed to perform this operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Forbiedden operation"
 
   securitySchemes:
     BearerAuth:
