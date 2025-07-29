@@ -209,6 +209,167 @@ paths:
             description: Not found
         '400':
             description: Bad request
+ 
+  /messages/{id}/comments:
+    post:
+      tags: ["messages"]
+      operationId: commentMessage
+      summary: Add a reaction to message
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id 
+          in: path
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: Comment added
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '400':
+          description: Bad request
+    delete:
+      tags: ["messages"]
+      operationId: uncommentMessage
+      summary: Remove a comment from a messsage
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+          '200':
+            description: Comment removed
+          '401':
+            description: Unauthorized
+          '404':
+            description: Not found
+          '400':
+            description: Bad request
+
+  /messages/{id}:
+    delete:
+      tags: ["messages"]
+      operationId: deleteMessage
+      summary: Delete a message
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Message deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        '400':
+          description: Bad request
+
+  /groups/{id}/members:
+    post:
+      tags: ["groups"]
+      operationId: addToGroup
+      summary: Add user to a group 
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User added to a group
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request
+    delete:
+      tags: ["groups"]
+      operationId: leaveGroup
+      summary: Leave a group 
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Left group
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request 
+
+  /groups/{id}/name:
+    put:
+      tags: ["groups"]
+      operationId: setGroupName
+      summary: Change group name 
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id 
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User added to a group
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request
+
+  /groups/{id}/photo:
+    put:
+      tags: ["groups"]
+      operationId: setGroupPhoto
+      summary: Change group photo 
+      security: 
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: 
+              type: object
+              properties:
+                photo:
+                  type: string 
+                  format: binary
+      responses:
+        '200':
+          description: Group photo uploaded
+        '401':
+            description: Unauthorized
+        '404':
+            description: Not found
+        '400':
+            description: Bad request 
 
 components:
   securitySchemes:
