@@ -361,6 +361,13 @@ paths:
                 photo:
                   type: string 
                   format: binary
+      parameters:
+        - name: id 
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The group ID
       responses:
         '200':
           description: Group photo uploaded
