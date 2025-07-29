@@ -80,7 +80,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  name: string 
+                  name: 
+                    type: string 
               example:
                 name: "NewName"
         '401':
