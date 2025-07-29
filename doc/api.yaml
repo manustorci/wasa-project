@@ -1,10 +1,23 @@
 openapi: 3.0.3 
 servers:
-  - url: "http://localhost:3000"
+  - url: "http://localhost:3000/v1"
 info:
   title: WASAText API
   description: WASAText - Messaging app API spec for WASA course
   version: "1.0.0"
+
+tags:
+  - name: login
+    description: Endpoints for user loggin and authentication
+  - name: profile
+    description: Endpoints for editing user profile (name, photo)
+  - name: conversations 
+    description: Endpoints for listing and retrieving conversations
+  - name: messages
+    description: Endpoints for sending, commententing, forwarding and deleting messages
+  - name: groups
+    description: Endpoints for managing group membership and info
+
 paths:
   /session:
     post:
@@ -62,12 +75,20 @@ paths:
       responses:
         '200':
           description: Name changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name: string 
+              example:
+                name: "NewName"
         '401':
-          description: Unauthorized #Token assente
+          { $ref: '#/components/responses/Unauthorized' }
         '404':
-          description: Not found #Utente non esiste
+          { $ref: '#/components/responses/NotFound' }
         '400':
-          description: Bad request #Name mancante
+          { $ref: '#/components/responses/BadRequest' }
  
   /me/photo:
     put:
@@ -90,11 +111,11 @@ paths:
         '200':
           description: Photo uploaded
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request       
+            { $ref: '#/components/responses/BadRequest' }
 
   /me/conversations:
     get:
@@ -107,11 +128,11 @@ paths:
         '200':
           description: List of conversations returned 
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request
+            { $ref: '#/components/responses/BadRequest' }
   
   /conversations/{id}:
     get:
@@ -129,12 +150,23 @@ paths:
       responses:
         '200':
           description: conversation returned 
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: "emanuele99"
+                partecipants: ["Marco", "Maria"]
+                messages:
+                  - sender: "Maria"
+                    text: "Ciao"
+                    timestamp: "2025-07-28T12:00:00Z"
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request
+            { $ref: '#/components/responses/BadRequest' }
 
   /conversations/{id}/messages:
     post:
@@ -168,12 +200,19 @@ paths:
       responses:
         '201':
           description: Message sent
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                messageId: "msg123"
+                status: "sent"
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request
+            { $ref: '#/components/responses/BadRequest' }
   
   /messages/{id}/forward:
     post:
@@ -204,11 +243,11 @@ paths:
         '200':
           description: Message forwarded
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request
+            { $ref: '#/components/responses/BadRequest' }
  
   /messages/{id}/comments:
     post:
@@ -226,12 +265,19 @@ paths:
       responses:
         '200':
           description: Comment added
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                commentId: "cmt001"
+                status: "ok"
         '401':
-          description: Unauthorized
+          { $ref: '#/components/responses/Unauthorized' }
         '404':
-          description: Not found
+          { $ref: '#/components/responses/NotFound' }
         '400':
-          description: Bad request
+          { $ref: '#/components/responses/BadRequest' }
     delete:
       tags: ["messages"]
       operationId: uncommentMessage
@@ -248,11 +294,11 @@ paths:
           '200':
             description: Comment removed
           '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
           '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
           '400':
-            description: Bad request
+            { $ref: '#/components/responses/BadRequest' }
 
   /messages/{id}:
     delete:
@@ -271,11 +317,11 @@ paths:
         '200':
           description: Message deleted
         '401':
-          description: Unauthorized
+          { $ref: '#/components/responses/Unauthorized' }
         '404':
-          description: Not found
+          { $ref: '#/components/responses/NotFound' }
         '400':
-          description: Bad request
+          { $ref: '#/components/responses/BadRequest' }
 
   /groups/{id}/members:
     post:
@@ -294,11 +340,11 @@ paths:
         '200':
           description: User added to a group
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request
+            { $ref: '#/components/responses/BadRequest' }
     delete:
       tags: ["groups"]
       operationId: leaveGroup
@@ -315,11 +361,11 @@ paths:
         '200':
           description: Left group
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request 
+            { $ref: '#/components/responses/BadRequest' }
 
   /groups/{id}/name:
     put:
@@ -338,11 +384,11 @@ paths:
         '200':
           description: User added to a group
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request
+            { $ref: '#/components/responses/BadRequest' }
 
   /groups/{id}/photo:
     put:
@@ -372,13 +418,23 @@ paths:
         '200':
           description: Group photo uploaded
         '401':
-            description: Unauthorized
+            { $ref: '#/components/responses/Unauthorized' }
         '404':
-            description: Not found
+            { $ref: '#/components/responses/NotFound' }
         '400':
-            description: Bad request 
+            { $ref: '#/components/responses/BadRequest' }
 
 components:
+  responses:
+    Unauthorized:
+      description: The access token is missing or it's expired
+    BadRequest:
+      description: The request was not compliant with the documentation (e.g., missing fields, etc.)
+    NotFound:
+      description: The requested resource was not found
+    Forbidden:
+      description: You are not allowed to perform this operation
+
   securitySchemes:
     BearerAuth:
       type: apiKey
