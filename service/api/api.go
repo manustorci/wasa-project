@@ -38,17 +38,18 @@ package api
 
 import (
 	"errors"
-	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
+	"net/http"
+	"wasa-project/service/api/session"
+	"wasa-project/service/database"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {
 	// Logger where log entries are sent
 	Logger logrus.FieldLogger
-
 	// Database is the instance of database.AppDatabase where data are saved
 	Database database.AppDatabase
 }
@@ -78,6 +79,34 @@ func New(cfg Config) (Router, error) {
 	router.RedirectTrailingSlash = false
 	router.RedirectFixedPath = false
 
+	// conf the route on the router
+	const api = "/v1"
+
+	sessHandler := session.NewHandler(cfg.Database)
+
+	router.POST(api+"/session", sessHandler.DoLogin)
+	router.POST(api+"/conversations/:id/messages", sessHandler.SendMessage)
+	router.POST(api+"/conversations", sessHandler.CreateConversation)
+	router.POST(api+"/groups/:id/members", sessHandler.AddUserToConversation)
+	router.POST(api+"/messages", sessHandler.SendDirectMessage)
+	router.POST(api+"/messages/:id/forward", sessHandler.ForwardMessage)
+	router.POST(api+"/messages/:id/comments", sessHandler.CommentMessage)
+
+	router.PUT(api+"/groups/:id/name", sessHandler.SetGroupName)
+	router.PUT(api+"/me/username", sessHandler.SetMyUserName)
+	router.PUT(api+"/me/photo", sessHandler.SetMyPhoto)
+	router.PUT(api+"/groups/:id/photo", sessHandler.SetGroupPhoto)
+
+	router.DELETE(api+"/messages/:id/comments", sessHandler.UncommentMessage)
+	router.DELETE(api+"/groups/:id/members", sessHandler.LeaveGroup)
+	router.DELETE(api+"/messages/:id", sessHandler.DeleteMessage)
+
+	router.GET(api+"/me/conversations", sessHandler.GetMyConversations)
+	router.GET(api+"/user/:id", sessHandler.GetUserByID)
+	router.GET(api+"/conversations/:id", sessHandler.GetConversation)
+	router.GET(api+"/users", sessHandler.ListUsers)
+
+	router.ServeFiles("/uploads/*filepath", http.Dir("."))
 	return &_router{
 		router:     router,
 		baseLogger: cfg.Logger,
