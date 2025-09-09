@@ -1,4 +1,4 @@
-module git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated
+module wasa-project
 
 go 1.17
 

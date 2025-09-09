@@ -1,0 +1,139 @@
+\[Verificato] Ecco un controllo rapido di coerenza tra **api.yaml** e le specifiche/FAQ del corso, più l’allineamento col tuo backend.
+
+### Cose a posto
+
+* **Login semplificato** (`POST /session`): `operationId: doLogin`, vincoli name 3–16, risposta `201` con `identifier` → ok e coerente con l’addendum.
+* **Operazioni richieste dalle specifiche**: hai coperto gli `operationId` attesi (login, profilo, conversazioni, messaggi, gruppi).
+* **Rotta base `/v1`**: server `http://localhost:3000/v1` e router con prefisso `/v1` sono coerenti.
+* **Upload foto utente/gruppo**: `multipart/form-data` con campo `photo` (backend con controlli dimensione/tipo). ✔
+
+### Da correggere in **api.yaml** (per evitare errori di validazione/aderenza)
+
+1. **Tipo di ID conversazione**
+
+   * In YAML è spesso `string` (es. `GET /conversations/{id}`, `id: string`), ma il backend usa **numeri** (`int`).
+   * Scegli una sola rappresentazione:
+
+     * **Opzione A (consigliata)**: cambia in YAML tutti gli `id` di conversazione a `type: integer` (path param e risposte).
+     * **Opzione B**: lascia `string` in YAML e nel backend fai `strconv.Itoa(...)` **ovunque** (anche nella risposta di `GET /conversations/{id}` che oggi restituisce `ID` numerico).
+       Attualmente c’è mismatch in più punti (p.es. `GET /conversations/{id}` e risposta `id`).&#x20;
+
+2. **Campo “participants”**
+
+   * In YAML e nel backend è scritto **`partecipants`** (typo). Rinomina a **`participants`** in YAML e nel JSON di risposta del backend. Oggi il backend serializza `Partecipants`.&#x20;
+
+3. **Ordine dei messaggi nella conversazione**
+
+   * Le specifiche richiedono **reverse-chronological** (più nuovi prima). Oggi la query usa `ORDER BY timestamp ASC`. Cambia a `DESC` o inverti a livello applicativo. &#x20;
+
+4. **Campi minimi nelle liste**
+
+   * Le specifiche dicono che nella lista conversazioni vanno mostrati **nome/foto, data/ora ultimo messaggio e anteprima**. In YAML `GET /me/conversations` oggi ritorna solo `id` e `name`. Aggiungi campi tipo:
+
+     ```yaml
+     lastMessageText: { type: string, nullable: true }
+     lastMessageAt:   { type: string, format: date-time, nullable: true }
+     photoUrl:        { type: string, nullable: true }
+     ```
+
+     La tua query DB calcola già `last_text` e `last_ts`, quindi è solo da esporre e documentare. &#x20;
+
+5. **Response 403 documentata**
+
+   * Il backend usa **403 Forbidden** in vari punti (es. membership al gruppo/conversazione), ma in YAML spesso manca la voce `403`. Aggiungi:
+
+     ```yaml
+     '403': { $ref: '#/components/responses/Forbidden' }
+     ```
+
+   (Hai già definito `components.responses.Forbidden`.)&#x20;
+
+6. **Vincoli sul nome in `PUT /me/username`**
+
+   * Il backend applica 3–16 caratteri e unicità; in YAML non c’è `minLength`/`maxLength`. Aggiungili per coerenza con login.&#x20;
+
+7. **Endpoint mancanti in YAML vs backend**
+
+   * Il backend espone `GET /user/:id` e (utile per i requisiti) una ricerca utenti `ListUsers` (non registrata nel router). Le specifiche richiedono la **ricerca utenti per username**: ti consiglio di **aggiungere** in YAML e router
+
+     * `GET /users?q=...` → elenco `{ id, name }`. &#x20;
+
+8. **Creazione conversazioni**
+
+   * Hai il backend `POST /conversations` (create group/conv), ma **manca in YAML**. Aggiungilo se vuoi permettere creazione esplicita dei gruppi (oltre a `POST /messages` che crea la 1–1 se manca).&#x20;
+
+9. **Refusi minori** (non bloccanti per validator ma meglio sistemarli): `commententing` → `commenting`, `Forward s` → `Forwards`, `messaage` → `message`, `RB containg` → `request body containing`, `Forbiedden` → `Forbidden`, descrizione duplicata nel path param di `/groups/{id}/name`.
+
+### Note di conformità al corso (non nel tuo YAML, ma importanti)
+
+* **CORS**: imposta *allow all origins* e **`Access-Control-Max-Age: 1`** sulla **preflight** per evitare penalità in correzione. Verifica che il tuo `cors.go` lo faccia (non lo vedo tra i file condivisi).
+* **SQLite foreign keys**: le **FK in SQLite** andrebbero abilitate via **DSN** (`"?_foreign_keys=1"`) perché `database/sql` usa un **pool** e un singolo `PRAGMA` può non applicarsi a tutte le connessioni. Oggi fai `PRAGMA foreign_keys = ON;` una volta; valuta di spostarlo nel DSN come suggerito nelle FAQ.
+
+### “Non posso verificarlo”
+
+* Collocazione del file: il corso richiede che l’OpenAPI sia in **`doc/api.yaml`** e si chiami proprio **`api.yaml`**. Non ho visibilità dell’albero del repo, quindi **non posso verificarlo** qui. Controlla.
+* Versione di Go nel `go.mod`: le FAQ docenti chiedono **`go 1.17` nel `go.mod`** (puoi compilare con versioni più nuove). Non ho il `go.mod`, **non posso verificarlo**.
+
+---
+
+### Patch veloci suggerite
+
+**api.yaml (estratti)**
+
+```yaml
+# 1) param id conversazione
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema: { type: integer }   # <- prima era string
+
+# 2) participants
+properties:
+  participants:                 # <- correggi nome campo
+    type: array
+    items: { type: string }
+
+# 3) getMyConversations payload più ricco
+/me/conversations:
+  get:
+    responses:
+      '200':
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:   { type: integer }
+                  name: { type: string }
+                  lastMessageText: { type: string, nullable: true }
+                  lastMessageAt:   { type: string, format: date-time, nullable: true }
+                  photoUrl:        { type: string, nullable: true }
+      '403': { $ref: '#/components/responses/Forbidden' }
+
+# 4) vincoli nome
+/me/username:
+  put:
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: { type: string, minLength: 3, maxLength: 16 }
+```
+
+**Backend (punti chiave)**
+
+* `GetConversation`: ordina i messaggi **DESC** in `ListConversationMessages` **oppure** inverti l’array prima di serializzare.&#x20;
+* Serializza `id` conversazione come **stringa** solo se mantieni `string` in YAML; altrimenti lascia `int` e aggiorna YAML.&#x20;
+* Rinomina `Partecipants` → `Participants` (e YAML).&#x20;
+* Registra l’endpoint **`GET /users`** per la ricerca (hai già `ListUsers`):
+
+  ```go
+  router.GET(api+"/users", sessHandler.ListUsers)
+  ```
+
+  e documentalo in YAML.&#x20;

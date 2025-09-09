@@ -106,7 +106,8 @@ func New(cfg Config) (Router, error) {
 	router.GET(api+"/conversations/:id", sessHandler.GetConversation)
 	router.GET(api+"/users", sessHandler.ListUsers)
 
-	router.ServeFiles("/uploads/*filepath", http.Dir("."))
+	router.ServeFiles("/uploads/*filepath", http.Dir("uploads"))
+
 	return &_router{
 		router:     router,
 		baseLogger: cfg.Logger,

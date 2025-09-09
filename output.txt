@@ -1,0 +1,1210 @@
+IBM OpenAPI Validator (validator: 1.35.2), @Copyright IBM Corporation 2017, 2025.
+
+Validation Results for doc/api.yaml:
+
+Errors:
+
+  Message :   Property names must be snake case: isGroup
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./conversations.post.requestBody.content.application/json.schema.properties
+  Line    :   153
+
+  Message :   Property names must be snake case: conversationId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./conversations.post.responses.201.content.application/json.schema.properties
+  Line    :   169
+
+  Message :   Property names must be snake case: lastMessageText
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties
+  Line    :   203
+
+  Message :   Property names must be snake case: lastMessageAt
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties
+  Line    :   203
+
+  Message :   Property names must be snake case: photoUrl
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties
+  Line    :   203
+
+  Message :   Property names must be snake case: messageId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./conversations/{id}/messages.post.responses.201.content.application/json.schema.properties
+  Line    :   398
+
+  Message :   Property names must be snake case: toUserId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./messages.post.requestBody.content.application/json.schema.properties
+  Line    :   433
+
+  Message :   Property names must be snake case: conversationId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./messages.post.responses.201.content.application/json.schema.properties
+  Line    :   449
+
+  Message :   Property names must be snake case: messageId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./messages.post.responses.201.content.application/json.schema.properties
+  Line    :   449
+
+  Message :   Property names must be snake case: conversationId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./messages/{id}/forward.post.requestBody.content.application/json.schema.properties
+  Line    :   500
+
+  Message :   Property names must be snake case: commentId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./messages/{id}/comments.post.responses.200.content.application/json.schema.properties
+  Line    :   565
+
+  Message :   Property names must be snake case: userId
+  Rule    :   ibm-property-casing-convention
+  Path    :   paths./groups/{id}/members.post.requestBody.content.application/json.schema.properties
+  Line    :   674
+
+Warnings:
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./session.post.operationId
+  Line    :   30
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./session.post.requestBody.content.application/json.schema
+  Line    :   35
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./session.post.requestBody.content.application/json.schema
+  Line    :   35
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./session.post.responses.201.content.application/json
+  Line    :   50
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./session.post.responses.201.content.application/json.schema
+  Line    :   51
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./session.post.responses.201.content.application/json.schema
+  Line    :   51
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./session.post.responses.201.content.application/json.schema.properties.identifier
+  Line    :   54
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./session.post.responses.201.content.application/json.schema.properties.identifier
+  Line    :   54
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./session.post.responses.201.content.application/json.schema.properties.identifier
+  Line    :   54
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./me/username.put.operationId
+  Line    :   62
+
+  Message :   operationIds should follow naming convention: operationId verb should be replace
+  Rule    :   ibm-operationid-naming-convention
+  Path    :   paths./me/username.put.operationId
+  Line    :   62
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./me/username.put.requestBody.content.application/json.schema
+  Line    :   71
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/username.put.requestBody.content.application/json.schema.properties.name
+  Line    :   75
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/username.put.requestBody.content.application/json.schema.properties.name
+  Line    :   75
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/username.put.requestBody.content.application/json.schema.properties.name
+  Line    :   75
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./me/username.put.responses.200.content.application/json.schema
+  Line    :   84
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   paths./me/username.put.responses.200.content.application/json.schema.properties.name
+  Line    :   88
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/username.put.responses.200.content.application/json.schema.properties.name
+  Line    :   88
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/username.put.responses.200.content.application/json.schema.properties.name
+  Line    :   88
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/username.put.responses.200.content.application/json.schema.properties.name
+  Line    :   88
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./me/photo.put
+  Line    :   100
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./me/photo.put.operationId
+  Line    :   102
+
+  Message :   operationIds should follow naming convention: operationId verb should be replace
+  Rule    :   ibm-operationid-naming-convention
+  Path    :   paths./me/photo.put.operationId
+  Line    :   102
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/photo.put.requestBody.content.multipart/form-data.schema.properties.photo
+  Line    :   114
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/photo.put.requestBody.content.multipart/form-data.schema.properties.photo
+  Line    :   114
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./me/photo.put.responses.200.content.application/json
+  Line    :   122
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./me/photo.put.responses.200.content.application/json.schema
+  Line    :   123
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/photo.put.responses.200.content.application/json.schema.properties.message
+  Line    :   127
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/photo.put.responses.200.content.application/json.schema.properties.message
+  Line    :   127
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/photo.put.responses.200.content.application/json.schema.properties.message
+  Line    :   127
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./conversations.post.operationId
+  Line    :   141
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./conversations.post.requestBody.content.application/json.schema
+  Line    :   150
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./conversations.post.requestBody.content.application/json.schema
+  Line    :   150
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations.post.requestBody.content.application/json.schema.properties.name
+  Line    :   154
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations.post.requestBody.content.application/json.schema.properties.name
+  Line    :   154
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations.post.requestBody.content.application/json.schema.properties.name
+  Line    :   154
+
+  Message :   Operations on a single resource instance should return the resource canonical schema
+  Rule    :   ibm-resource-response-consistency
+  Path    :   paths./conversations.post.responses.201.content.application/json
+  Line    :   166
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./conversations.post.responses.201.content.application/json
+  Line    :   166
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./conversations.post.responses.201.content.application/json.schema
+  Line    :   167
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./conversations.post.responses.201.content.application/json.schema
+  Line    :   167
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./me/conversations.get.operationId
+  Line    :   186
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema
+  Line    :   196
+
+  Message :   Nested objects should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items
+  Line    :   200
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.name
+  Line    :   210
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.name
+  Line    :   210
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.name
+  Line    :   210
+
+  Message :   nullable properties should be defined only within a JSON merge-patch request body schema
+  Rule    :   ibm-no-nullable-properties
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.lastMessageText
+  Line    :   213
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.lastMessageText
+  Line    :   213
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.lastMessageText
+  Line    :   213
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.lastMessageText
+  Line    :   213
+
+  Message :   nullable properties should be defined only within a JSON merge-patch request body schema
+  Rule    :   ibm-no-nullable-properties
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.lastMessageAt
+  Line    :   217
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.lastMessageAt
+  Line    :   217
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.lastMessageAt
+  Line    :   217
+
+  Message :   nullable properties should be defined only within a JSON merge-patch request body schema
+  Rule    :   ibm-no-nullable-properties
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.photoUrl
+  Line    :   222
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.photoUrl
+  Line    :   222
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.photoUrl
+  Line    :   222
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.properties.items.properties.photoUrl
+  Line    :   222
+
+  Message :   Schema example is not valid: is not of a type(s) object
+  Rule    :   ibm-valid-schema-example
+  Path    :   paths./me/conversations.get.responses.200.content.application/json.schema.example
+  Line    :   226
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./user/{id}.get
+  Line    :   242
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./user/{id}.get.operationId
+  Line    :   244
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.parameters.0.schema
+  Line    :   253
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.parameters.0.schema
+  Line    :   253
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.parameters.0.schema
+  Line    :   253
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./user/{id}.get.responses.200.content.application/json
+  Line    :   259
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema
+  Line    :   260
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema
+  Line    :   260
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.id
+  Line    :   263
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.id
+  Line    :   263
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.id
+  Line    :   263
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.id
+  Line    :   263
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.name
+  Line    :   266
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.name
+  Line    :   266
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.name
+  Line    :   266
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./user/{id}.get.responses.200.content.application/json.schema.properties.name
+  Line    :   266
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./conversations/{id}.get.operationId
+  Line    :   291
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema
+  Line    :   301
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.participants.items
+  Line    :   317
+
+  Message :   Nested objects should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items
+  Line    :   327
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.sender
+  Line    :   331
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.sender
+  Line    :   331
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.sender
+  Line    :   331
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.text
+  Line    :   334
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.text
+  Line    :   334
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.text
+  Line    :   334
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.timestamp
+  Line    :   337
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}.get.responses.200.content.application/json.schema.properties.messages.items.properties.timestamp
+  Line    :   337
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./conversations/{id}/messages.post
+  Line    :   357
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./conversations/{id}/messages.post.operationId
+  Line    :   359
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./conversations/{id}/messages.post.requestBody.content.application/json.schema
+  Line    :   377
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./conversations/{id}/messages.post.requestBody.content.application/json.schema
+  Line    :   377
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.requestBody.content.application/json.schema.properties.text
+  Line    :   382
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.requestBody.content.application/json.schema.properties.text
+  Line    :   382
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.requestBody.content.application/json.schema.properties.text
+  Line    :   382
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.requestBody.content.application/json.schema.properties.timestamp
+  Line    :   386
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.requestBody.content.application/json.schema.properties.timestamp
+  Line    :   386
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./conversations/{id}/messages.post.responses.201.content.application/json.schema
+  Line    :   396
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./conversations/{id}/messages.post.responses.201.content.application/json.schema
+  Line    :   396
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.responses.201.content.application/json.schema.properties.status
+  Line    :   405
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.responses.201.content.application/json.schema.properties.status
+  Line    :   405
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./conversations/{id}/messages.post.responses.201.content.application/json.schema.properties.status
+  Line    :   405
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./messages.post.operationId
+  Line    :   421
+
+  Message :   operationIds should follow naming convention: operationId verb should be create
+  Rule    :   ibm-operationid-naming-convention
+  Path    :   paths./messages.post.operationId
+  Line    :   421
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages.post.requestBody.content.application/json.schema
+  Line    :   430
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./messages.post.requestBody.content.application/json.schema
+  Line    :   430
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.requestBody.content.application/json.schema.properties.toUserId
+  Line    :   434
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.requestBody.content.application/json.schema.properties.toUserId
+  Line    :   434
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.requestBody.content.application/json.schema.properties.toUserId
+  Line    :   434
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.requestBody.content.application/json.schema.properties.text
+  Line    :   438
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.requestBody.content.application/json.schema.properties.text
+  Line    :   438
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.requestBody.content.application/json.schema.properties.text
+  Line    :   438
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./messages.post.responses.201.content.application/json
+  Line    :   446
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages.post.responses.201.content.application/json.schema
+  Line    :   447
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./messages.post.responses.201.content.application/json.schema
+  Line    :   447
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   paths./messages.post.responses.201.content.application/json.schema.properties.status
+  Line    :   462
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.responses.201.content.application/json.schema.properties.status
+  Line    :   462
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.responses.201.content.application/json.schema.properties.status
+  Line    :   462
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages.post.responses.201.content.application/json.schema.properties.status
+  Line    :   462
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./messages/{id}/forward.post.operationId
+  Line    :   475
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages/{id}/forward.post.requestBody.content.application/json.schema
+  Line    :   495
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./messages/{id}/forward.post.responses.200.content.application/json
+  Line    :   511
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages/{id}/forward.post.responses.200.content.application/json.schema
+  Line    :   512
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/forward.post.responses.200.content.application/json.schema.properties.status
+  Line    :   516
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/forward.post.responses.200.content.application/json.schema.properties.status
+  Line    :   516
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/forward.post.responses.200.content.application/json.schema.properties.status
+  Line    :   516
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./messages/{id}/comments.post
+  Line    :   538
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./messages/{id}/comments.post.operationId
+  Line    :   540
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages/{id}/comments.post.requestBody.content.application/json.schema
+  Line    :   548
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.post.requestBody.content.application/json.schema.properties.comment
+  Line    :   552
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.post.requestBody.content.application/json.schema.properties.comment
+  Line    :   552
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.post.requestBody.content.application/json.schema.properties.comment
+  Line    :   552
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages/{id}/comments.post.responses.200.content.application/json.schema
+  Line    :   562
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.post.responses.200.content.application/json.schema.properties.status
+  Line    :   572
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.post.responses.200.content.application/json.schema.properties.status
+  Line    :   572
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.post.responses.200.content.application/json.schema.properties.status
+  Line    :   572
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./messages/{id}/comments.delete
+  Line    :   584
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./messages/{id}/comments.delete.operationId
+  Line    :   586
+
+  Message :   operationIds should follow naming convention: operationId verb should be delete or unset
+  Rule    :   ibm-operationid-naming-convention
+  Path    :   paths./messages/{id}/comments.delete.operationId
+  Line    :   586
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./messages/{id}/comments.delete.responses.200.content.application/json
+  Line    :   594
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages/{id}/comments.delete.responses.200.content.application/json.schema
+  Line    :   595
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   599
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   599
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}/comments.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   599
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./messages/{id}.delete.operationId
+  Line    :   613
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./messages/{id}.delete.responses.200.content.application/json
+  Line    :   632
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./messages/{id}.delete.responses.200.content.application/json.schema
+  Line    :   633
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   637
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   637
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./messages/{id}.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   637
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./groups/{id}/members.post
+  Line    :   659
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./groups/{id}/members.post.operationId
+  Line    :   661
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./groups/{id}/members.post.requestBody.content.application/json.schema
+  Line    :   669
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.post.requestBody.content.application/json.schema.properties.userId
+  Line    :   675
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.post.requestBody.content.application/json.schema.properties.userId
+  Line    :   675
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.post.requestBody.content.application/json.schema.properties.userId
+  Line    :   675
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./groups/{id}/members.post.responses.200.content.application/json
+  Line    :   683
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./groups/{id}/members.post.responses.200.content.application/json.schema
+  Line    :   684
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.post.responses.200.content.application/json.schema.properties.status
+  Line    :   688
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.post.responses.200.content.application/json.schema.properties.status
+  Line    :   688
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.post.responses.200.content.application/json.schema.properties.status
+  Line    :   688
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./groups/{id}/members.delete
+  Line    :   699
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./groups/{id}/members.delete.operationId
+  Line    :   701
+
+  Message :   operationIds should follow naming convention: operationId verb should be delete or unset
+  Rule    :   ibm-operationid-naming-convention
+  Path    :   paths./groups/{id}/members.delete.operationId
+  Line    :   701
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./groups/{id}/members.delete.responses.200.content.application/json
+  Line    :   709
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./groups/{id}/members.delete.responses.200.content.application/json.schema
+  Line    :   710
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   714
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   714
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/members.delete.responses.200.content.application/json.schema.properties.status
+  Line    :   714
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./groups/{id}/name.put
+  Line    :   726
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./groups/{id}/name.put.operationId
+  Line    :   728
+
+  Message :   Request body schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./groups/{id}/name.put.requestBody.content.application/json.schema
+  Line    :   747
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/name.put.requestBody.content.application/json.schema.properties.name
+  Line    :   753
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/name.put.requestBody.content.application/json.schema.properties.name
+  Line    :   753
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/name.put.requestBody.content.application/json.schema.properties.name
+  Line    :   753
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./groups/{id}/name.put.responses.200.content.application/json
+  Line    :   761
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./groups/{id}/name.put.responses.200.content.application/json.schema
+  Line    :   762
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/name.put.responses.200.content.application/json.schema.properties.name
+  Line    :   766
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/name.put.responses.200.content.application/json.schema.properties.name
+  Line    :   766
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/name.put.responses.200.content.application/json.schema.properties.name
+  Line    :   766
+
+  Message :   Operation "description" must be present and non-empty string.
+  Rule    :   operation-description
+  Path    :   paths./groups/{id}/photo.put
+  Line    :   778
+
+  Message :   Operation ids must be snake case
+  Rule    :   ibm-operationid-casing-convention
+  Path    :   paths./groups/{id}/photo.put.operationId
+  Line    :   780
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./groups/{id}/photo.put.requestBody.content.multipart/form-data.schema
+  Line    :   788
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   paths./groups/{id}/photo.put.requestBody.content.multipart/form-data.schema.properties.photo
+  Line    :   791
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/photo.put.requestBody.content.multipart/form-data.schema.properties.photo
+  Line    :   791
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/photo.put.requestBody.content.multipart/form-data.schema.properties.photo
+  Line    :   791
+
+  Message :   Response bodies should include an example response
+  Rule    :   ibm-success-response-example
+  Path    :   paths./groups/{id}/photo.put.responses.200.content.application/json
+  Line    :   808
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   paths./groups/{id}/photo.put.responses.200.content.application/json.schema
+  Line    :   809
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   paths./groups/{id}/photo.put.responses.200.content.application/json.schema
+  Line    :   809
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   paths./groups/{id}/photo.put.responses.200.content.application/json.schema.properties.message
+  Line    :   812
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/photo.put.responses.200.content.application/json.schema.properties.message
+  Line    :   812
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/photo.put.responses.200.content.application/json.schema.properties.message
+  Line    :   812
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   paths./groups/{id}/photo.put.responses.200.content.application/json.schema.properties.message
+  Line    :   812
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   components.responses.Unauthorized.content.application/json.schema
+  Line    :   828
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   components.responses.Unauthorized.content.application/json.schema
+  Line    :   828
+
+  Message :   Error container model should contain property 'trace' of type string
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.Unauthorized.content.application/json.schema.properties
+  Line    :   830
+
+  Message :   Error container model must contain property 'errors' which must be an array of error models
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.Unauthorized.content.application/json.schema.properties
+  Line    :   830
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   components.responses.Unauthorized.content.application/json.schema.properties.message
+  Line    :   831
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.Unauthorized.content.application/json.schema.properties.message
+  Line    :   831
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.Unauthorized.content.application/json.schema.properties.message
+  Line    :   831
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.Unauthorized.content.application/json.schema.properties.message
+  Line    :   831
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   components.responses.BadRequest.content.application/json.schema
+  Line    :   838
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   components.responses.BadRequest.content.application/json.schema
+  Line    :   838
+
+  Message :   Error container model should contain property 'trace' of type string
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.BadRequest.content.application/json.schema.properties
+  Line    :   840
+
+  Message :   Error container model must contain property 'errors' which must be an array of error models
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.BadRequest.content.application/json.schema.properties
+  Line    :   840
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   components.responses.BadRequest.content.application/json.schema.properties.message
+  Line    :   841
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.BadRequest.content.application/json.schema.properties.message
+  Line    :   841
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.BadRequest.content.application/json.schema.properties.message
+  Line    :   841
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.BadRequest.content.application/json.schema.properties.message
+  Line    :   841
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   components.responses.NotFound.content.application/json.schema
+  Line    :   848
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   components.responses.NotFound.content.application/json.schema
+  Line    :   848
+
+  Message :   Error container model should contain property 'trace' of type string
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.NotFound.content.application/json.schema.properties
+  Line    :   850
+
+  Message :   Error container model must contain property 'errors' which must be an array of error models
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.NotFound.content.application/json.schema.properties
+  Line    :   850
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   components.responses.NotFound.content.application/json.schema.properties.message
+  Line    :   851
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.NotFound.content.application/json.schema.properties.message
+  Line    :   851
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.NotFound.content.application/json.schema.properties.message
+  Line    :   851
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.NotFound.content.application/json.schema.properties.message
+  Line    :   851
+
+  Message :   Response schemas should be defined as a $ref to a named schema
+  Rule    :   ibm-avoid-inline-schemas
+  Path    :   components.responses.Forbidden.content.application/json.schema
+  Line    :   858
+
+  Message :   Schemas should have a non-empty description
+  Rule    :   ibm-schema-description
+  Path    :   components.responses.Forbidden.content.application/json.schema
+  Line    :   858
+
+  Message :   Error container model should contain property 'trace' of type string
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.Forbidden.content.application/json.schema.properties
+  Line    :   860
+
+  Message :   Error container model must contain property 'errors' which must be an array of error models
+  Rule    :   ibm-error-response-schemas
+  Path    :   components.responses.Forbidden.content.application/json.schema.properties
+  Line    :   860
+
+  Message :   Schema properties should have a non-empty description
+  Rule    :   ibm-property-description
+  Path    :   components.responses.Forbidden.content.application/json.schema.properties.message
+  Line    :   861
+
+  Message :   String schemas should define property 'pattern'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.Forbidden.content.application/json.schema.properties.message
+  Line    :   861
+
+  Message :   String schemas should define property 'minLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.Forbidden.content.application/json.schema.properties.message
+  Line    :   861
+
+  Message :   String schemas should define property 'maxLength'
+  Rule    :   ibm-string-attributes
+  Path    :   components.responses.Forbidden.content.application/json.schema.properties.message
+  Line    :   861
+
+Summary:
+
+  Total number of errors   : 12
+  Total number of warnings : 223
+
+  Errors:
+  12 (100%) : Property names must be snake case
+
+  Warnings:
+  17   (8%) : Operation ids must be snake case
+   9   (4%) : Request body schemas should be defined as a $ref to a named schema
+  15   (7%) : Schemas should have a non-empty description
+  12   (5%) : Response bodies should include an example response
+  21   (9%) : Response schemas should be defined as a $ref to a named schema
+  34  (15%) : String schemas should define property 'pattern'
+  38  (17%) : String schemas should define property 'minLength'
+  38  (17%) : String schemas should define property 'maxLength'
+   5   (2%) : operationIds should follow naming convention
+  10   (4%) : Schema properties should have a non-empty description
+   9   (4%) : Operation "description" must be present and non-empty string.
+   1   (0%) : Operations on a single resource instance should return the resource canonical schema
+   2   (1%) : Nested objects should be defined as a $ref to a named schema
+   3   (1%) : nullable properties should be defined only within a JSON merge-patch request body schema
+   1   (0%) : Schema example is not valid
+   4   (2%) : Error container model should contain property 'trace' of type string
+   4   (2%) : Error container model must contain property 'errors' which must be an array of error models
+

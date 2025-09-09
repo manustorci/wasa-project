@@ -928,7 +928,7 @@ func (h *Handler) SetMyPhoto(w http.ResponseWriter, r *http.Request, _ httproute
 		return
 	}
 
-	// parso il multipart (limite 10 mb)
+	// parse multipart
 	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
@@ -940,7 +940,6 @@ func (h *Handler) SetMyPhoto(w http.ResponseWriter, r *http.Request, _ httproute
 	}
 	defer file.Close()
 
-	// leggo in memoria con limite
 	lr := &io.LimitedReader{R: file, N: maxUploadSize + 1}
 	data, err := io.ReadAll(lr)
 	if err != nil {
@@ -952,35 +951,37 @@ func (h *Handler) SetMyPhoto(w http.ResponseWriter, r *http.Request, _ httproute
 		return
 	}
 
-	// valida tipo (solo immagini note)
 	ext, ok := detectImageExt(data)
 	if !ok {
 		http.Error(w, "Bad request: unsupported image type", http.StatusBadRequest)
 		return
 	}
 
-	// la path: ./uploads/users/<uid><ext>
 	if err := os.MkdirAll("uploads/users", 0o755); err != nil {
 		log.Printf("MkdirAll: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	// se cambia tipo, sovrascriviamo con nuova estensione
-	dst := filepath.Join("uploads", "users", uid+ext)
 
-	if err := os.WriteFile(dst, data, 0o644); err != nil {
-		log.Printf("WriteFile(%s): %v (orig: %s)", dst, err, header.Filename)
+	dstFS := filepath.Join("uploads", "users", uid+ext)
+	if err := os.WriteFile(dstFS, data, 0o644); err != nil {
+		log.Printf("WriteFile(%s): %v (orig: %s)", dstFS, err, header.Filename)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	if err := h.db.SetUserPhoto(uid, dst); err != nil {
+
+	url := "/uploads/users/" + uid + ext
+	if err := h.db.SetUserPhoto(uid, url); err != nil {
 		log.Printf("SetUserPhoto: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(map[string]string{"message": "Photo uploaded"})
+	_ = json.NewEncoder(w).Encode(map[string]string{
+		"message": "Photo uploaded",
+		"url":     url,
+	})
 }
 
 func (h *Handler) SetGroupPhoto(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -996,7 +997,6 @@ func (h *Handler) SetGroupPhoto(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	// 404 se non esiste
 	info, err := h.db.GetConversationInfo(groupID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -1007,13 +1007,11 @@ func (h *Handler) SetGroupPhoto(w http.ResponseWriter, r *http.Request, params h
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	// 400 se non è gruppo
 	if !info.IsGroup {
 		http.Error(w, "Bad request: Not a group conversation", http.StatusBadRequest)
 		return
 	}
 
-	// 403 se non membro
 	if ok, err := h.db.IsUserInConversation(groupID, uid); err != nil {
 		log.Printf("IsUserInConversation: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
@@ -1023,7 +1021,6 @@ func (h *Handler) SetGroupPhoto(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	// parso il multipart
 	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
@@ -1052,27 +1049,30 @@ func (h *Handler) SetGroupPhoto(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	// path: ./uploads/groups/<id><ext>
-	if err := os.MkdirAll("uploads/groups", 0o755); err != nil {
+	if err := os.MkdirAll("uploads/groups", 0o755); err != nil { // <- relativo, non "/uploads/..."
 		log.Printf("MkdirAll: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	dst := filepath.Join("uploads", "groups", strconv.Itoa(groupID)+ext)
-
-	if err := os.WriteFile(dst, data, 0o644); err != nil {
-		log.Printf("WriteFile(%s): %v (orig: %s)", dst, err, header.Filename)
+	dstFS := filepath.Join("uploads", "groups", strconv.Itoa(groupID)+ext)
+	if err := os.WriteFile(dstFS, data, 0o644); err != nil {
+		log.Printf("WriteFile(%s): %v (orig: %s)", dstFS, err, header.Filename)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	if err := h.db.SetConversationPhoto(groupID, dst); err != nil {
+
+	url := "/uploads/groups/" + strconv.Itoa(groupID) + ext
+	if err := h.db.SetConversationPhoto(groupID, url); err != nil { // salva URL, non path FS
 		log.Printf("SetConversationPhoto: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(map[string]string{"message": "Photo uploaded"})
+	_ = json.NewEncoder(w).Encode(map[string]string{
+		"message": "Photo uploaded",
+		"url":     url,
+	})
 }
 
 func (h *Handler) ListUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
