@@ -3,6 +3,7 @@ package session
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -44,7 +45,7 @@ func (h *Handler) DoLogin(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	}
 
 	u, err := h.db.GetUserByUsername(req.Name)
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
@@ -82,7 +83,7 @@ func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request, params htt
 	id := params.ByName("id")
 
 	user, err := h.db.GetUserByID(id)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		http.Error(w, "user not found", http.StatusNotFound)
 		return
 	}
@@ -903,6 +904,7 @@ func detectImageExt(data []byte) (string, bool) {
 		return "", false
 	}
 }
+
 func min(a, b int) int {
 	if a < b {
 		return a
