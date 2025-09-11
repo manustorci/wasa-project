@@ -76,7 +76,7 @@ func New(cfg Config) (Router, error) {
 	// Create a new router where we will register HTTP endpoints. The server will pass requests to this router to be
 	// handled.
 	router := httprouter.New()
-	router.RedirectTrailingSlash = false
+	router.RedirectTrailingSlash = true
 	router.RedirectFixedPath = false
 
 	// conf the route on the router
