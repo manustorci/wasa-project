@@ -39,8 +39,6 @@ package api
 import (
 	"errors"
 	"net/http"
-	"strings"
-	"wasa-project/service/api/session"
 	"wasa-project/service/database"
 
 	"github.com/julienschmidt/httprouter"
@@ -64,10 +62,6 @@ type Router interface {
 	Close() error
 }
 
-func fixPath(path string) string {
-	return strings.ReplaceAll(path, "{id}", ":id")
-}
-
 // New returns a new Router instance
 func New(cfg Config) (Router, error) {
 	// Check if the configuration is correct
@@ -85,33 +79,6 @@ func New(cfg Config) (Router, error) {
 	router.RedirectFixedPath = false
 
 	// conf the route on the router
-	const api = "/v1"
-
-	sessHandler := session.NewHandler(cfg.Database)
-
-	router.POST(fixPath(api+"/session"), sessHandler.DoLogin)
-	router.POST(fixPath(api+"/conversations/{id}/messages"), sessHandler.SendMessage)
-	router.POST(fixPath(api+"/conversations"), sessHandler.CreateConversation)
-	router.POST(fixPath(api+"/groups/{id}/members"), sessHandler.AddUserToConversation)
-	router.POST(fixPath(api+"/messages"), sessHandler.SendDirectMessage)
-	router.POST(fixPath(api+"/messages/{id}/forward"), sessHandler.ForwardMessage)
-	router.POST(fixPath(api+"/messages/{id}/comments"), sessHandler.CommentMessage)
-
-	router.PUT(fixPath(api+"/groups/{id}/name"), sessHandler.SetGroupName)
-	router.PUT(fixPath(api+"/me/username"), sessHandler.SetMyUserName)
-	router.PUT(fixPath(api+"/me/photo"), sessHandler.SetMyPhoto)
-	router.PUT(fixPath(api+"/groups/{id}/photo"), sessHandler.SetGroupPhoto)
-
-	router.DELETE(fixPath(api+"/messages/{id}/comments"), sessHandler.UncommentMessage)
-	router.DELETE(fixPath(api+"/groups/{id}/members"), sessHandler.LeaveGroup)
-	router.DELETE(fixPath(api+"/messages/{id}"), sessHandler.DeleteMessage)
-
-	router.GET(fixPath(api+"/me/conversations"), sessHandler.GetMyConversations)
-	router.GET(fixPath(api+"/user/{id}"), sessHandler.GetUserByID)
-	router.GET(fixPath(api+"/conversations/{id}"), sessHandler.GetConversation)
-	router.GET(fixPath(api+"/users"), sessHandler.ListUsers)
-
-	router.ServeFiles("/uploads/*filepath", http.Dir("uploads"))
 
 	return &_router{
 		router:     router,
