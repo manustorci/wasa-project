@@ -32,7 +32,7 @@ export default {
     async refresh() {
       this.loading = true; this.errormsg = null;
       try {
-        const { data } = await this.$axios.get("/v1/me/conversations");
+        const { data } = await this.$axios.get("/me/conversations");
         this.items = [...data].sort(
           (a, b) => new Date(b.lastMessageAt || 0) - new Date(a.lastMessageAt || 0)
         );
@@ -58,7 +58,7 @@ export default {
         const q = (box.query || "").trim();
         if (!q) { box.results = []; return; }
         try {
-          const { data } = await this.$axios.get("/v1/users", { params:{ q } });
+          const { data } = await this.$axios.get("/users", { params:{ q } });
           box.results = data; // [{id, name}]
         } catch {}
       }, 250);
@@ -81,13 +81,13 @@ export default {
           let sel = this.newDlg.dm.selected;
           if (!sel && this.newDlg.dm.query.trim()) {
             const q = this.newDlg.dm.query.trim();
-            const { data: users } = await this.$axios.get("/v1/users", { params:{ q } });
+            const { data: users } = await this.$axios.get("/users", { params:{ q } });
             sel = users.find(u => u.name === q);  // match esatto username
           }
           if (!sel) { this.errormsg = "Seleziona un destinatario"; return; }
 
           const text = (this.newDlg.dm.text || "👋").trim();
-          const { data } = await this.$axios.post("/v1/messages", { toUserId: sel.id, text });
+          const { data } = await this.$axios.post("/messages", { toUserId: sel.id, text });
           this.closeNew();
           await this.refresh();
           this.$router.push({ name: "conversation", params: { id: data.conversationId } });
@@ -98,10 +98,10 @@ export default {
         const name = (this.newDlg.group.name || "").trim();
         if (!name) { this.errormsg = "Inserisci un nome per il gruppo"; return; }
 
-        const { data } = await this.$axios.post("/v1/conversations", { name, isGroup: true });
+        const { data } = await this.$axios.post("/conversations", { name, isGroup: true });
         const groupId = data.conversationId;
         for (const m of this.newDlg.group.members) {
-          await this.$axios.post(`/v1/groups/${groupId}/members`, { userId: m.id });
+          await this.$axios.post(`/groups/${groupId}/members`, { userId: m.id });
         }
         this.closeNew();
         await this.refresh();

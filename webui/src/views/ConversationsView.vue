@@ -20,7 +20,7 @@ export default {
           query: "",
           results: [],
           selected: null,
-          text: "👋", // primo messaggio richiesto da /v1/messages
+          text: "👋", // primo messaggio richiesto da /messages
           _timer: null,
         },
         // gruppo
@@ -52,7 +52,7 @@ export default {
       this.loading = true;
       this.errormsg = null;
       try {
-        const { data } = await this.$axios.get("/v1/me/conversations");
+        const { data } = await this.$axios.get("/me/conversations");
         this.items = [...data].sort(
           (a, b) => new Date(b.lastMessageAt || 0) - new Date(a.lastMessageAt || 0)
         );
@@ -66,7 +66,7 @@ export default {
       if (!this.userPhotoFile) return;
       const fd = new FormData();
       fd.append("photo", this.userPhotoFile);
-      await this.$axios.put("/v1/me/photo", fd, { headers:{ "Content-Type":"multipart/form-data" }});
+      await this.$axios.put("/me/photo", fd, { headers:{ "Content-Type":"multipart/form-data" }});
       this.userPhotoFile = null;
       await this.refresh(); // ricarica la lista per vedere l’avatar aggiornato
     },
@@ -100,7 +100,7 @@ export default {
           return;
         }
         try {
-          const { data } = await this.$axios.get("/v1/users", { params: { q } }); // [{id,name}]
+          const { data } = await this.$axios.get("/users", { params: { q } }); // [{id,name}]
           box.results = data;
         } catch {
           /* silenzio, è solo un autocomplete */
@@ -129,7 +129,7 @@ export default {
     async leaveGroup(id) {
       if (!confirm("Leave this group?")) return;
       try {
-        await this.$axios.delete(`/v1/groups/${id}/members`);
+        await this.$axios.delete(`/groups/${id}/members`);
         await this.refresh(); // ricarica la lista
       } catch (e) {
         this.errormsg = e?.response?.data?.message || e?.message || "Errore";
@@ -147,7 +147,7 @@ export default {
           // fallback: se non ha cliccato il suggerimento, prova match esatto sull'username
           if (!sel && this.newDlg.dm.query.trim()) {
             const q = this.newDlg.dm.query.trim();
-            const { data: users } = await this.$axios.get("/v1/users", { params: { q } });
+            const { data: users } = await this.$axios.get("/users", { params: { q } });
             sel = users.find((u) => u.name === q);
           }
 
@@ -157,7 +157,7 @@ export default {
           }
 
           const text = (this.newDlg.dm.text || "👋").trim();
-          const { data } = await this.$axios.post("/v1/messages", {
+          const { data } = await this.$axios.post("/messages", {
             toUserId: sel.id,
             text,
           });
@@ -174,12 +174,12 @@ export default {
           return;
         }
 
-        const { data } = await this.$axios.post("/v1/conversations", { name, isGroup: true });
+        const { data } = await this.$axios.post("/conversations", { name, isGroup: true });
         const groupId = data.conversationId;
 
         // aggiungi membri selezionati
         for (const m of this.newDlg.group.members) {
-          await this.$axios.post(`/v1/groups/${groupId}/members`, { userId: m.id });
+          await this.$axios.post(`/groups/${groupId}/members`, { userId: m.id });
         }
 
         this.closeNew();

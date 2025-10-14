@@ -58,7 +58,7 @@ export default {
       const id = this.$route.params.id;
       const fd = new FormData();
       fd.append("photo", this.groupPhotoFile);
-      await this.$axios.put(`/v1/groups/${id}/photo`, fd, { headers:{ "Content-Type":"multipart/form-data" }});
+      await this.$axios.put(`/groups/${id}/photo`, fd, { headers:{ "Content-Type":"multipart/form-data" }});
       this.groupPhotoFile = null;
       await this.loadHeadInfo(); // per aggiornare eventualmente name/photo lato lista
     },
@@ -82,7 +82,7 @@ export default {
     async deleteMessage(m) {
       if (!confirm("Annullare questo messaggio?")) return;
       try {
-        await this.$axios.delete(`/v1/messages/${m.id}`);
+        await this.$axios.delete(`/messages/${m.id}`);
         // ottimistico: rimuovo localmente senza ricaricare tutto
         this.convo.messages = (this.convo.messages || []).filter(x => x.id !== m.id);
         this.msgMenuFor = null;
@@ -109,7 +109,7 @@ export default {
     async loadForwardTargets() {
       this.forwardDlg.loading = true; this.forwardDlg.err = null;
       try {
-        const { data } = await this.$axios.get("/v1/me/conversations");
+        const { data } = await this.$axios.get("/me/conversations");
         const currentId = Number(this.$route.params.id);
         this.forwardDlg.items = (data || []).filter(c => c.id !== currentId);
       } catch (e) {
@@ -126,7 +126,7 @@ export default {
 
       this.forwardDlg.submitting = true; this.forwardDlg.err = null;
       try {
-        await this.$axios.post(`/v1/messages/${msg.id}/forward`, { conversationId: dst });
+        await this.$axios.post(`/messages/${msg.id}/forward`, { conversationId: dst });
         this.closeForward();
 
       } catch (e) {
@@ -145,9 +145,9 @@ export default {
     async toggleReaction(m, emoji) {
       try {
         if (this.hasReacted(m, emoji)) {
-          await this.$axios.delete(`/v1/messages/${m.id}/comments`);
+          await this.$axios.delete(`/messages/${m.id}/comments`);
         } else {
-          await this.$axios.post(`/v1/messages/${m.id}/comments`, { comment: emoji });
+          await this.$axios.post(`/messages/${m.id}/comments`, { comment: emoji });
         }
         this.pickerForId = null;
         await this.load();
@@ -166,7 +166,7 @@ export default {
       this.loading = true; this.errormsg = null;
       try {
         const { id } = this.$route.params;
-        const { data } = await this.$axios.get(`/v1/conversations/${id}`);
+        const { data } = await this.$axios.get(`/conversations/${id}`);
         this.convo = data;
       } catch (e) {
         this.errormsg = e?.response?.data?.message || e?.message || "Error";
@@ -178,7 +178,7 @@ export default {
       if (!this.text.trim()) return;
       try {
         const { id } = this.$route.params;
-        await this.$axios.post(`/v1/conversations/${id}/messages`, { text: this.text.trim() });
+        await this.$axios.post(`/conversations/${id}/messages`, { text: this.text.trim() });
         this.text = "";
         await this.load();
       } catch (e) {
@@ -190,7 +190,7 @@ export default {
     async loadHeadInfo() {
       const id = Number(this.$route.params.id);
       try {
-        const { data } = await this.$axios.get("/v1/me/conversations");
+        const { data } = await this.$axios.get("/me/conversations");
         const conv = data.find(c => c.id === id);
         if (conv) { this.title = conv.name; this.isGroup = !!conv.isGroup; }
         else { this.title = ""; this.isGroup = false; }
@@ -207,7 +207,7 @@ export default {
     async doRename() {
       const id = this.$route.params.id;
       if (!this.newName?.trim()) return;
-      await this.$axios.put(`/v1/groups/${id}/name`, { name: this.newName.trim() });
+      await this.$axios.put(`/groups/${id}/name`, { name: this.newName.trim() });
       this.title = this.newName.trim();
       this.modalType = null;
     },
@@ -217,10 +217,10 @@ export default {
       if (!query) return;
       const id = this.$route.params.id;
       try {
-        const { data: users } = await this.$axios.get("/v1/users", { params: { q: query } });
+        const { data: users } = await this.$axios.get("/users", { params: { q: query } });
         const user = users.find(u => u.name === query) || users[0];
         if (!user) { alert("Utente non trovato"); return; }
-        await this.$axios.post(`/v1/groups/${id}/members`, { userId: user.id });
+        await this.$axios.post(`/groups/${id}/members`, { userId: user.id });
         this.newUser = "";
         await this.loadHeadInfo(); await this.load();
         this.modalType = null;
@@ -236,7 +236,7 @@ export default {
     },
     async leaveGroup() {
       const id = this.$route.params.id;
-      await this.$axios.delete(`/v1/groups/${id}/members`);
+      await this.$axios.delete(`/groups/${id}/members`);
       this.$router.push("/chat");
     },
 

@@ -41,7 +41,7 @@ export default {
       if (!f) return;
       const fd = new FormData(); fd.append("photo", f);
       try{
-        const res = await this.$axios?.put?.("/v1/me/photo", fd, {
+        const res = await this.$axios?.put?.("/me/photo", fd, {
           headers: { "Content-Type":"multipart/form-data" }
         });
         const url = res?.data?.url;

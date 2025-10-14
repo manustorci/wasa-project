@@ -6,7 +6,7 @@ export default {
     async login() {
       this.loading = true; this.errormsg = null;
       try {
-        const { data } = await this.$axios.post("/v1/session", { name: this.name });
+        const { data } = await this.$axios.post("/session", { name: this.name });
         localStorage.setItem("identifier", data.identifier);
         this.$router.push("/");   
 
