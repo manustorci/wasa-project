@@ -582,3 +582,24 @@ func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 	}
 	return out, rows.Err()
 }
+
+func (db *appdbimpl) SearchUsersByName(query string) ([]User, error) {
+	rows, err := db.c.Query(`
+        SELECT id, username, photo
+        FROM users
+        WHERE username LIKE ?`, "%"+query+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []User
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.ID, &u.Username, &u.PhotoURL); err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+	return users, nil
+}

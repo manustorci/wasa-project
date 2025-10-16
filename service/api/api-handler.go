@@ -38,6 +38,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/me/username", rt.wrap(rt.SetMyUserName))
 	rt.router.PUT("/me/photo", rt.wrap(rt.SetMyPhoto))
 	rt.router.GET("/user/:id", rt.wrap(rt.GetUserByID))
+	rt.router.GET("/users", rt.wrap(rt.SearchUsers))
 
 	// --- Static files ---
 	rt.router.ServeFiles("/uploads/*filepath", http.Dir("uploads"))

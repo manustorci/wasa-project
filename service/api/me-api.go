@@ -221,3 +221,37 @@ func authUserID(r *http.Request) string {
 	}
 	return raw
 }
+
+func (rt *_router) SearchUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params, ctx reqcontext.RequestContext) {
+	uid := authUserID(r)
+	if uid == "" {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	query := strings.TrimSpace(r.URL.Query().Get("q"))
+
+	users, err := rt.db.ListUsers(query)
+	if err != nil {
+		http.Error(w, "Internal error", http.StatusInternalServerError)
+		return
+	}
+
+	type userResponse struct {
+		ID    string  `json:"id"`
+		Name  string  `json:"name"`
+		Photo *string `json:"photo,omitempty"`
+	}
+
+	var resp []userResponse
+	for _, u := range users {
+		resp = append(resp, userResponse{
+			ID:    u.ID,
+			Name:  u.Username,
+			Photo: u.PhotoURL,
+		})
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(resp)
+}

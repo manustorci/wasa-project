@@ -276,6 +276,58 @@ paths:
         '404': 
           $ref: '#/components/responses/NotFound'
 
+  /users:
+    get:
+      tags: ["profile"]
+      operationId: searchUsers
+      summary: Search users by name
+      description: Retrieve a list of users whose username contains the given query string.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Substring to match usernames against.
+          schema:
+            type: string
+            description: The text fragment used to search for users.
+            example: "juli"
+            pattern: '^[A-Za-z0-9_]+$'
+            minLength: 1
+            maxLength: 32
+      responses:
+        '200':
+          description: List of users matching the search query.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: List of users found matching the query.
+                items:
+                  type: object
+                  description: Single user search result.
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier of the user.
+                      example: "abc123"
+                      pattern: '^[0-9a-zA-Z-]+$'
+                      minLength: 3
+                      maxLength: 64
+                    name:
+                      type: string
+                      description: Username of the user.
+                      example: "juli"
+                      pattern: '^[A-Za-z0-9_ ]+$'
+                      minLength: 3
+                      maxLength: 16
+                    photo:
+                      type: string
+                      nullable: true
+                      description: URL of the user profile photo.
+                      example: "https://example.com/u/juli.jpg"
+
   /conversations/{id}:
     get:
       parameters:
