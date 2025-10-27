@@ -52,6 +52,10 @@ export default {
   },
 
   methods: {
+    logout() {
+      localStorage.removeItem("identifier");
+      this.$router.push("/"); // oppure "/login" se hai una route Login
+    },
 
     async changeGroupPhoto(){
       if (!this.groupPhotoFile) return;
@@ -268,6 +272,7 @@ export default {
           <button class="link-mono" :disabled="!isGroup" @click="openRename()">Change group name</button>
           <button class="link-mono" :disabled="!isGroup" @click="openAddUser()">Add user</button>
            <button class="link-mono" :disabled="!isGroup" @click="$refs.grpPhoto.click()">Change group photo</button>
+           
           <input
             ref="grpPhoto"
             type="file"
@@ -275,7 +280,8 @@ export default {
             class="d-none"
             @change="e => { groupPhotoFile = e.target.files[0]; changeGroupPhoto(); }"
           />
-          <button class="link-mono link-mono--danger" :disabled="!isGroup" @click="confirmLeave()">Leave group</button>
+          <button class="link-mono link-mono" :disabled="!isGroup" @click="confirmLeave()">Leave group</button>
+          <button class="link-mono link-mono--danger" @click="logout()">Logout</button>
 
         </div>
       </div>
