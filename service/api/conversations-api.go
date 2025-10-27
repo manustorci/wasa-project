@@ -83,7 +83,7 @@ func (rt *_router) SendMessage(w http.ResponseWriter, r *http.Request, params ht
 func (rt *_router) CreateConversation(w http.ResponseWriter, r *http.Request, params httprouter.Params, ctx reqcontext.RequestContext) {
 	type createConversationRequest struct {
 		Name    string `json:"name"`
-		IsGroup bool   `json:"isGroup"` //posso togliere
+		IsGroup bool   `json:"isGroup"` // posso togliere
 	}
 
 	type createConversationResponse struct {

@@ -43,7 +43,7 @@ type ConversationSummary struct {
 	IsGroup   bool
 	LastText  *string
 	LastAt    *time.Time
-	LastAtISO *string //mostra ultima attività in lista
+	LastAtISO *string // mostra ultima attività in lista
 }
 
 func (db *appdbimpl) GetUserByID(id string) (*User, error) {
@@ -56,7 +56,7 @@ func (db *appdbimpl) GetUserByID(id string) (*User, error) {
 	return &u, nil
 }
 
-//func CreateUser
+// func CreateUser
 
 func (db *appdbimpl) GetUserByUsername(username string) (*User, error) {
 	row := db.c.QueryRow("SELECT id, username, photo FROM users WHERE username = ?", username)

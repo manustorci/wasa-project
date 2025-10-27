@@ -104,7 +104,7 @@ func (rt *_router) ForwardMessage(w http.ResponseWriter, r *http.Request, params
 	}
 	dstConvID := rb.ConversationID
 
-	// ✅ prendo i dati del messaggio originale
+	// prendo i dati del messaggio originale
 	srcMsg, err := rt.db.GetMessageByID(msgID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -116,7 +116,7 @@ func (rt *_router) ForwardMessage(w http.ResponseWriter, r *http.Request, params
 		return
 	}
 
-	// ✅ Caso B: conversazione non esiste → creala
+	// Caso B: conversazione non esiste → creala
 	if _, err := rt.db.GetConversationInfo(dstConvID); err != nil {
 		if err == sql.ErrNoRows {
 			otherID := srcMsg.SenderID
@@ -146,20 +146,20 @@ func (rt *_router) ForwardMessage(w http.ResponseWriter, r *http.Request, params
 		}
 	}
 
-	// ✅ Sicurezza: devi essere membro della destinazione
+	// Sicurezza: devi essere membro della destinazione
 	if ok, err := rt.db.IsUserInConversation(dstConvID, uid); err != nil || !ok {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
 
-	// ✅ inoltra il messaggio (testo del srcMsg)
+	// inoltra il messaggio (testo del srcMsg)
 	if _, err := rt.db.InsertMessage(dstConvID, uid, srcMsg.Text); err != nil {
 		log.Printf("InsertMessage(forward): %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
 
-	// ✅ risposta
+	// risposta
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"status":         "Forwarded",

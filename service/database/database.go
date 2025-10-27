@@ -39,7 +39,7 @@ import (
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
-	//user
+	// user
 	CreateUser(id, username string) error
 	GetUserByID(id string) (*User, error)
 	GetUserByUsername(username string) (*User, error)
@@ -47,7 +47,7 @@ type AppDatabase interface {
 	SetUsername(userID, newUsername string) error
 	ListMessageComments(messageID int) ([]Comment, error)
 
-	//group
+	// group
 	SendMessage(sender_id string, conversation_id int, text string) error
 	CreateConversation(name string, isGroup bool, creatorID string) (int, error)
 	AddUserToConversation(conversationID int, userID string) error
@@ -90,7 +90,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 	var tableName string
 
-	//users
+	// users
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='users';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `
@@ -105,7 +105,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 		}
 	}
 
-	//conversations
+	// conversations
 	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='conversations';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `
@@ -121,7 +121,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 		}
 	}
 
-	//photo
+	// photo
 	var hasPhotoCol int
 	err = db.QueryRow(`SELECT 1 FROM pragma_table_info('conversations') WHERE name='photo'`).Scan(&hasPhotoCol)
 	if errors.Is(err, sql.ErrNoRows) {
@@ -132,7 +132,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 		return nil, fmt.Errorf("checking conversations.photo: %w", err)
 	}
 
-	//user_conversations
+	// user_conversations
 	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user_conversations';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `
@@ -150,7 +150,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 		}
 	}
 
-	//messages
+	// messages
 	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='messages';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `
