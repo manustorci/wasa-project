@@ -6,6 +6,8 @@ export default {
       items: [],
       loading: true,
       errormsg: null,
+      refreshTimer: null,
+
 
       // dialog "nuova conversazione"
       newDlg: {
@@ -17,7 +19,17 @@ export default {
       },
     };
   },
-  async mounted() { await this.refresh(); },
+  async mounted() {
+    await this.refresh();
+    this.refreshTimer = setInterval(() => {
+      this.refresh();
+    }, 5000);
+  },
+
+  beforeUnmount() {
+    clearInterval(this.refreshTimer);
+  },
+
 
   methods: {
     photoSrc(p){
