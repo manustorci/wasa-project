@@ -580,7 +580,11 @@ func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 		}
 		out = append(out, c)
 	}
-	return out, rows.Err()
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return out, nil
+
 }
 
 func (db *appdbimpl) SearchUsersByName(query string) ([]User, error) {
