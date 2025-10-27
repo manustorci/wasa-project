@@ -14,6 +14,7 @@ export default {
       isGroup: false,
       menuOpen: false,
       newName: "",
+      
       modalType: null,
       emojiSet: ["👍","❤️","😂","🎉","😮","😢","🔥","🙏"],
       pickerForId: null, // id del mex che ha il picker aperto
@@ -28,6 +29,9 @@ export default {
         targetId: null,     
         query: "",         
         err: null,
+      },
+      membersDlg: {
+        open: false
       },
     };
   },
@@ -301,6 +305,10 @@ export default {
         <div v-if="menuOpen" class="position-absolute end-0 mt-2 menu-mono" style="z-index:10;">
           <button class="link-mono" :disabled="!isGroup" @click="openRename()">Change group name</button>
           <button class="link-mono" :disabled="!isGroup" @click="openAddUser()">Add user</button>
+          <button class="link-mono" :disabled="!isGroup" @click="membersDlg.open = true">View members</button>
+        
+
+
            <button class="link-mono" :disabled="!isGroup" @click="$refs.grpPhoto.click()">Change group photo</button>
            
           <input
@@ -373,6 +381,31 @@ export default {
         </div>
       </li>
     </ul>
+
+      <!-- MEMBERS DIALOG -->
+      <div v-if="membersDlg.open" class="dlg-backdrop" @click.self="membersDlg.open = false">
+        <div class="dlg card-mono p-3">
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <strong>Group members</strong>
+            <button class="btn btn-sm btn-outline-dark" @click="membersDlg.open = false">
+              Close
+            </button>
+          </div>
+
+          <ul class="list-unstyled mb-0">
+            <li
+              v-for="p in convo.participants"
+              :key="p"
+              class="d-flex align-items-center gap-2 p-2 mb-2 border rounded bg-white"
+            >
+              <div class="member-avatar">{{ p.slice(0,1).toUpperCase() }}</div>
+              {{ p }}
+            </li>
+          </ul>
+
+        </div>
+      </div>
 
     <!-- composer -->
     <form class="d-flex gap-2" @submit.prevent="send">
@@ -484,4 +517,17 @@ export default {
 <style scoped>
 .dlg-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.15); display:grid; place-items:center; z-index:1000; }
 .dlg{ width:520px; max-width:95vw; }
+
+.member-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 </style>
