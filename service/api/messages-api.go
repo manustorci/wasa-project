@@ -91,44 +91,20 @@ func (rt *_router) ForwardMessage(w http.ResponseWriter, r *http.Request, params
 		return
 	}
 
-	msgIDStr := params.ByName("id")
-	msgID, err := strconv.Atoi(msgIDStr)
+	msgID, err := strconv.Atoi(params.ByName("id"))
 	if err != nil || msgID <= 0 {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
 
 	var rb reqBody
-	if err := json.NewDecoder(r.Body).Decode(&rb); err != nil || rb.ConversationID <= 0 {
+	if err := json.NewDecoder(r.Body).Decode(&rb); err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
 	dstConvID := rb.ConversationID
-	if err != nil || dstConvID <= 0 {
-		http.Error(w, "Bad request", http.StatusBadRequest)
-		return
-	}
 
-	// conversazione di destinazione -> esistenza + membership
-	if _, err := rt.db.GetConversationInfo(dstConvID); err != nil {
-		if err == sql.ErrNoRows {
-			http.Error(w, "Not found", http.StatusNotFound)
-			return
-		}
-		log.Printf("GetConversationInfo(dst): %v", err)
-		http.Error(w, "internal error", http.StatusInternalServerError)
-		return
-	}
-	if ok, err := rt.db.IsUserInConversation(dstConvID, uid); err != nil {
-		log.Printf("IsUserInConversation(dst): %v", err)
-		http.Error(w, "internal error", http.StatusInternalServerError)
-		return
-	} else if !ok {
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
-	}
-
-	// messaggio sorgente -> load + mship nella conversazione sorgente
+	// ✅ prendo i dati del messaggio originale
 	srcMsg, err := rt.db.GetMessageByID(msgID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -139,24 +115,56 @@ func (rt *_router) ForwardMessage(w http.ResponseWriter, r *http.Request, params
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	if ok, err := rt.db.IsUserInConversation(srcMsg.ConversationID, uid); err != nil {
-		log.Printf("IsUserInConversation(src): %v", err)
-		http.Error(w, "internal error", http.StatusInternalServerError)
-		return
-	} else if !ok {
+
+	// ✅ Caso B: conversazione non esiste → creala
+	if _, err := rt.db.GetConversationInfo(dstConvID); err != nil {
+		if err == sql.ErrNoRows {
+			otherID := srcMsg.SenderID
+			if otherID == uid {
+				otherID = srcMsg.SenderID
+			}
+
+			dstConvID, err = rt.db.FindDirectConversation(uid, otherID)
+			if err == sql.ErrNoRows {
+				// crea chat diretta nuova
+				dstConvID, err = rt.db.CreateDirectConversation(uid, otherID, "")
+				if err != nil {
+					log.Printf("CreateDirectConversation: %v", err)
+					http.Error(w, "internal error", http.StatusInternalServerError)
+					return
+				}
+			} else if err != nil {
+				log.Printf("FindDirectConversation: %v", err)
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+
+		} else {
+			log.Printf("GetConversationInfo: %v", err)
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+	}
+
+	// ✅ Sicurezza: devi essere membro della destinazione
+	if ok, err := rt.db.IsUserInConversation(dstConvID, uid); err != nil || !ok {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
 
-	// inserisco il messaggio nella destinazione
+	// ✅ inoltra il messaggio (testo del srcMsg)
 	if _, err := rt.db.InsertMessage(dstConvID, uid, srcMsg.Text); err != nil {
 		log.Printf("InsertMessage(forward): %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
 
+	// ✅ risposta
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(map[string]string{"status": "Forwarded"})
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"status":         "Forwarded",
+		"conversationId": dstConvID,
+	})
 }
 
 func (rt *_router) CommentMessage(w http.ResponseWriter, r *http.Request, params httprouter.Params, ctx reqcontext.RequestContext) {

@@ -57,6 +57,36 @@ export default {
       this.$router.push("/"); // oppure "/login" se hai una route Login
     },
 
+    async forwardNewChat() {
+      const msg = this.forwardDlg.msg;
+      if (!msg?.id) return;
+
+      try {
+        // trova user ID del destinatario cercando lo username
+        const q = this.forwardDlg.query.trim();
+        const { data: users } = await this.$axios.get("/users", { params:{ q }});
+        const u = users.find(x => x.name === q);
+        if (!u) {
+          alert("User not found");
+          return;
+        }
+
+        // crea o trova la DM
+        const { data: res } = await this.$axios.post("/messages", {
+          toUserId: u.id,
+          text: msg.text
+        });
+
+        // chiudi e vai alla nuova chat
+        this.forwardDlg.open = false;
+        this.$router.push({ name: "conversation", params: { id: res.conversationId } });
+      
+      } catch (e) {
+        alert(e?.response?.data?.message || e.message || "Forward error");
+      }
+    },
+
+
     async changeGroupPhoto(){
       if (!this.groupPhotoFile) return;
       const id = this.$route.params.id;
@@ -425,12 +455,20 @@ export default {
               <span class="text-truncate">{{ c.name }}</span>
             </li>
           </ul>
-          <div v-if="!forwardDlg.items.length" class="text-muted">No conversation avaible</div>
+          <div v-if="!forwardDlg.items.length" class="text-muted mb-3">
+            No existing chats for this message.
+            <button class="btn btn-dark mt-2 w-100" @click="forwardNewChat">
+              Start new chat & Forward
+            </button>
+          </div>
+
+
         </div>
 
         <p v-if="forwardDlg.err" class="text-danger mb-2">{{ forwardDlg.err }}</p>
 
         <button
+          v-if="forwardDlg.items.length"
           class="btn btn-dark w-100"
           :disabled="!forwardDlg.targetId || forwardDlg.submitting"
           @click="doForward"
