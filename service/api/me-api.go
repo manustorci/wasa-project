@@ -51,7 +51,7 @@ func (rt *_router) SetMyUserName(w http.ResponseWriter, r *http.Request, _ httpr
 	if u, err := rt.db.GetUserByUsername(newName); err == nil && u != nil && u.ID != uid {
 		http.Error(w, "Bad request: name already taken", http.StatusBadRequest)
 		return
-	} else if err != nil && err != sql.ErrNoRows {
+	} else if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Printf("GetUserByUsername: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
