@@ -38,7 +38,7 @@ func (rt *_router) SetMyUserName(w http.ResponseWriter, r *http.Request, _ httpr
 
 	// 404 se il bearer non mappa a un utente
 	if _, err := rt.db.GetUserByID(uid); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -77,7 +77,7 @@ func (rt *_router) SetMyPhoto(w http.ResponseWriter, r *http.Request, _ httprout
 
 	// 404 se l'utente non esiste
 	if _, err := rt.db.GetUserByID(uid); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}

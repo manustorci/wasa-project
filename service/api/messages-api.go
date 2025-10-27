@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -41,7 +42,7 @@ func (rt *_router) SendDirectMessage(w http.ResponseWriter, r *http.Request, _ h
 	}
 
 	if _, err := rt.db.GetUserByID(req.ToUserID); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Recipient not found", http.StatusNotFound)
 			return
 		}
@@ -51,7 +52,7 @@ func (rt *_router) SendDirectMessage(w http.ResponseWriter, r *http.Request, _ h
 	}
 
 	convID, err := rt.db.FindDirectConversation(senderID, req.ToUserID)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		convID, err = rt.db.CreateDirectConversation(senderID, req.ToUserID, "")
 		if err != nil {
 			log.Printf("CreateDirectConversation: %v", err)
@@ -107,7 +108,7 @@ func (rt *_router) ForwardMessage(w http.ResponseWriter, r *http.Request, params
 	// prendo i dati del messaggio originale
 	srcMsg, err := rt.db.GetMessageByID(msgID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -118,14 +119,14 @@ func (rt *_router) ForwardMessage(w http.ResponseWriter, r *http.Request, params
 
 	// Caso B: conversazione non esiste → creala
 	if _, err := rt.db.GetConversationInfo(dstConvID); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			otherID := srcMsg.SenderID
 			if otherID == uid {
 				otherID = srcMsg.SenderID
 			}
 
 			dstConvID, err = rt.db.FindDirectConversation(uid, otherID)
-			if err == sql.ErrNoRows {
+			if errors.Is(err, sql.ErrNoRows) {
 				// crea chat diretta nuova
 				dstConvID, err = rt.db.CreateDirectConversation(uid, otherID, "")
 				if err != nil {
@@ -193,7 +194,7 @@ func (rt *_router) CommentMessage(w http.ResponseWriter, r *http.Request, params
 	// 404 se il messaggio non esiste
 	m, err := rt.db.GetMessageByID(msgID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -247,7 +248,7 @@ func (rt *_router) UncommentMessage(w http.ResponseWriter, r *http.Request, para
 	// 404 se il messaggio non esiste
 	m, err := rt.db.GetMessageByID(msgID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -309,7 +310,7 @@ func (rt *_router) DeleteMessage(w http.ResponseWriter, r *http.Request, params 
 		// on è stato cancellato nulla: distingui 404 vs 403
 		m, err := rt.db.GetMessageByID(msgID)
 		if err != nil {
-			if err == sql.ErrNoRows {
+			if errors.Is(err, sql.ErrNoRows) {
 				http.Error(w, "Not found", http.StatusNotFound)
 				return
 			}

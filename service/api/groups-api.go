@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -31,7 +32,7 @@ func (rt *_router) AddUserToConversation(w http.ResponseWriter, r *http.Request,
 	// 404 se non esiste
 	info, err := rt.db.GetConversationInfo(conversationID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -100,7 +101,7 @@ func (rt *_router) SetGroupName(w http.ResponseWriter, r *http.Request, params h
 
 	info, err := rt.db.GetConversationInfo(groupID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -149,7 +150,7 @@ func (rt *_router) SetGroupPhoto(w http.ResponseWriter, r *http.Request, params 
 
 	info, err := rt.db.GetConversationInfo(groupID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -241,7 +242,7 @@ func (rt *_router) LeaveGroup(w http.ResponseWriter, r *http.Request, params htt
 	// 404 se la conversazione/gruppo non esiste
 	info, err := rt.db.GetConversationInfo(groupID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}

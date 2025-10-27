@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -37,7 +38,7 @@ func (rt *_router) SendMessage(w http.ResponseWriter, r *http.Request, params ht
 
 	// 404 se la conversazione non esiste
 	if _, err := rt.db.GetConversationInfo(conversationID); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}
@@ -128,7 +129,7 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 
 	// 404 se non esiste
 	if _, err := rt.db.GetConversationInfo(convID); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return
 		}

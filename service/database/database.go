@@ -276,7 +276,7 @@ func (db *appdbimpl) IsUserInConversation(conversationID int, userID string) (bo
 
 	var one int
 	if err := row.Scan(&one); err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return false, nil
 		}
 		return false, err
