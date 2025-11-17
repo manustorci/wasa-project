@@ -15,6 +15,7 @@
 
     <!-- Campo cambio username -->
     <div class="me-username">
+      <span class="current-username">{{ currentUsername }}</span>
       <input
         v-model="newUsername"
         class="form-control form-control-sm"
@@ -34,6 +35,7 @@ export default {
     myUrl: localStorage.getItem("myPhotoUrl") || "",
     origin: "",
     newUsername: "",
+    currentUsername: localStorage.getItem("myUsername") || ""
   }),
   computed: {
     srcOk() {
@@ -87,6 +89,8 @@ export default {
       try {
         await this.$axios.put("/me/username", { name });
         alert("Username updated!");
+        this.currentUsername = name;
+        localStorage.setItem("myUsername", name);
         this.newUsername = "";
       } catch (e) {
         console.error(e);
@@ -138,4 +142,12 @@ export default {
 .fallback {
   font-weight: 800;
 }
+
+.current-username {
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
 </style>
+

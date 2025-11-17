@@ -8,6 +8,7 @@ export default {
       try {
         const { data } = await this.$axios.post("/session", { name: this.name });
         localStorage.setItem("identifier", data.identifier);
+        localStorage.setItem("myUsername", this.name);
         this.$router.push("/");   
 
       } catch (e) {
