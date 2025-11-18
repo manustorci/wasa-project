@@ -12,7 +12,7 @@ export default {
         this.$router.push("/");   
 
       } catch (e) {
-        this.errormsg = e?.response?.data?.message || e?.message || "Login failed";
+        this.errormsg = e?.response?.data || "Login failed";
 
       } finally {
         this.loading = false;

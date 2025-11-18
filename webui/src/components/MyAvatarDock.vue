@@ -94,7 +94,8 @@ export default {
         this.newUsername = "";
       } catch (e) {
         console.error(e);
-        alert("Failed to update username");
+        const msg = e?.response?.data || "Failed to update username";
+        alert(msg);
       }
     },
   },
