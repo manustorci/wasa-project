@@ -90,6 +90,13 @@ export default {
       }
     },
 
+    reactionAuthors(m, emoji) {
+      return this.msgComments(m)
+        .filter(c => c.comment === emoji)
+        .map(c => c.userName || c.user || c.userId)
+        .join(", ");
+    },
+
 
     async changeGroupPhoto(){
       if (!this.groupPhotoFile) return;
@@ -387,10 +394,13 @@ export default {
               class="rxn-pill"
               :class="{ 'is-mine': hasReacted(m, emoji) }"
               @click="toggleReaction(m, emoji)"
+              :title="reactionAuthors(m, emoji)"
+
             >
               {{ emoji }} <span v-if="count">{{ count }}</span>
             </button>
           </template>
+
 
           <button type="button" class="rxn-add" @click="openPicker(m)">+</button>
 

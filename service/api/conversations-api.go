@@ -164,8 +164,9 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 	}
 
 	type commentView struct {
-		UserID  string `json:"userId"`
-		Comment string `json:"comment"`
+		UserID   string `json:"userId"`
+		UserName string `json:"userName"`
+		Comment  string `json:"comment"`
 	}
 
 	type msgView struct {
@@ -187,10 +188,17 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 		// prendi i commenti
 		dbComments, _ := rt.db.ListMessageComments(m.ID)
 		cv := make([]commentView, 0, len(dbComments))
+
 		for _, c := range dbComments {
+			userName := c.UserID
+			if u, err := rt.db.GetUserByID(c.UserID); err == nil && u != nil {
+				userName = u.Username
+			}
+
 			cv = append(cv, commentView{
-				UserID:  c.UserID,
-				Comment: c.Comment,
+				UserID:   c.UserID,
+				UserName: userName,
+				Comment:  c.Comment,
 			})
 		}
 

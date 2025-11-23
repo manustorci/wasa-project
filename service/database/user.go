@@ -19,6 +19,7 @@ type Message struct {
 type Comment struct {
 	MessageID int
 	UserID    string
+	UserName  string
 	Comment   string
 	Timestamp time.Time
 }

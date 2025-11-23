@@ -562,10 +562,16 @@ func (db *appdbimpl) ListUsers(q string) ([]User, error) {
 
 func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 	rows, err := db.c.Query(`
-        SELECT message_id, user_id, comment, timestamp
-        FROM message_comments
-        WHERE message_id = ?
-        ORDER BY timestamp ASC
+        SELECT 
+            mc.message_id,
+            mc.user_id,
+            u.username,
+            mc.comment,
+            mc.timestamp
+        FROM message_comments mc
+        JOIN users u ON u.id = mc.user_id
+        WHERE mc.message_id = ?
+        ORDER BY mc.timestamp ASC
     `, messageID)
 	if err != nil {
 		return nil, err
@@ -575,7 +581,13 @@ func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 	var out []Comment
 	for rows.Next() {
 		var c Comment
-		if err := rows.Scan(&c.MessageID, &c.UserID, &c.Comment, &c.Timestamp); err != nil {
+		if err := rows.Scan(
+			&c.MessageID,
+			&c.UserID,
+			&c.UserName,
+			&c.Comment,
+			&c.Timestamp,
+		); err != nil {
 			return nil, err
 		}
 		out = append(out, c)
@@ -584,7 +596,6 @@ func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 		return nil, err
 	}
 	return out, nil
-
 }
 
 func (db *appdbimpl) SearchUsersByName(query string) ([]User, error) {
