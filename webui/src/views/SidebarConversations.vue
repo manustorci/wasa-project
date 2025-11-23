@@ -98,6 +98,13 @@ export default {
           }
           if (!sel) { this.errormsg = "Seleziona un destinatario"; return; }
 
+          // evito di mandare dm a me stesso
+          const me = localStorage.getItem("identifier");
+          if (String(sel.id) === String(me)) {
+            this.errormsg = "Non puoi creare una conversazione con te stesso.";
+            return;
+          }
+
           const text = (this.newDlg.dm.text || "👋").trim();
           const { data } = await this.$axios.post("/messages", { toUserId: sel.id, text });
           this.closeNew();
@@ -144,8 +151,19 @@ export default {
         :class="{ 'is-active': String($route.params.id||'') === String(c.id) }"
       >
         <div class="conv-avatar me-3">
-          <img v-if="photoSrc(c.photoUrl)" :src="photoSrc(c.photoUrl)" alt="" />
-          <div v-else class="conv-fallback">{{ (c.name||'?').slice(0,1).toUpperCase() }}</div>
+          <!-- se è un gruppo -->
+          <template v-if="c.isGroup">
+            <img v-if="photoSrc(c.photoUrl)" :src="photoSrc(c.photoUrl)" alt="" />
+            <div v-else class="conv-fallback">👥</div>
+          </template>
+
+          <!-- se NON è un gruppo (dm) -->
+          <template v-else>
+            <img v-if="photoSrc(c.photoUrl)" :src="photoSrc(c.photoUrl)" alt="" />
+            <div v-else class="conv-fallback">
+              {{ (c.name||'?').slice(0,1).toUpperCase() }}
+            </div>
+          </template>
         </div>
 
         <div class="flex-grow-1">

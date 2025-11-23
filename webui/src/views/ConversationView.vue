@@ -214,6 +214,26 @@ export default {
     },
     async send() {
       if (!this.text.trim()) return;
+
+      const currentUserId = this.$store?.state?.user?.id ?? localStorage.getItem("identifier");
+      let recipientId = this.convo?.recipientId || this.convo?.participantIds?.find((id) => id !== currentUserId);
+      if (!recipientId && !this.isGroup && Array.isArray(this.convo?.participants)) {
+        const recipientName = this.convo.participants.find((name) => !!name);
+        if (recipientName) {
+          try {
+            const { data: users } = await this.$axios.get("/users", { params: { q: recipientName } });
+            recipientId = users.find((u) => u.name === recipientName)?.id;
+            } catch {
+            }
+          }
+        }
+        if (recipientId && recipientId === currentUserId) {
+          this.errormsg = "Non puoi inviare un messaggio a te stesso.";
+        return;
+        }
+
+
+
       try {
         const { id } = this.$route.params;
         await this.$axios.post(`/conversations/${id}/messages`, { text: this.text.trim() });
