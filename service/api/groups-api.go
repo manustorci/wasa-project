@@ -63,9 +63,22 @@ func (rt *_router) AddUserToConversation(w http.ResponseWriter, r *http.Request,
 	}
 
 	if err := rt.db.AddUserToConversation(conversationID, req.UserID); err != nil {
-		log.Printf("AddUserToConversation: %v", err)
-		http.Error(w, "internal error", http.StatusInternalServerError)
-		return
+
+		switch err.Error() {
+
+		case "already-member":
+			http.Error(w, "User already in conversation", http.StatusConflict)
+			return
+
+		case "not-found":
+			http.Error(w, "User or conversation not found", http.StatusNotFound)
+			return
+
+		default:
+			log.Printf("AddUserToConversation: %v", err)
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")

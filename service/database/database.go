@@ -34,6 +34,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // AppDatabase is the high level interface for the DB
@@ -245,10 +246,24 @@ func (db *appdbimpl) CreateConversation(name string, isGroup bool, creatorID str
 
 func (db *appdbimpl) AddUserToConversation(conversationID int, userID string) error {
 	_, err := db.c.Exec(`
-	INSERT INTO user_conversations (conversation_id, user_id)
-	VALUES (?,?)`,
+		INSERT INTO user_conversations (conversation_id, user_id)
+		VALUES (?, ?)`,
 		conversationID, userID)
-	return err
+
+	if err != nil {
+		msg := err.Error()
+		// se l'utente è già nel gruppo
+		if strings.Contains(msg, "UNIQUE") {
+			return fmt.Errorf("already-member")
+		}
+		// se l'utente non esiste
+		if strings.Contains(msg, "FOREIGN KEY") {
+			return fmt.Errorf("not-found")
+		}
+		// altri errori veri
+		return err
+	}
+	return nil
 }
 
 // esistenza is_group
@@ -562,16 +577,10 @@ func (db *appdbimpl) ListUsers(q string) ([]User, error) {
 
 func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 	rows, err := db.c.Query(`
-        SELECT 
-            mc.message_id,
-            mc.user_id,
-            u.username,
-            mc.comment,
-            mc.timestamp
-        FROM message_comments mc
-        JOIN users u ON u.id = mc.user_id
-        WHERE mc.message_id = ?
-        ORDER BY mc.timestamp ASC
+        SELECT message_id, user_id, comment, timestamp
+        FROM message_comments
+        WHERE message_id = ?
+        ORDER BY timestamp ASC
     `, messageID)
 	if err != nil {
 		return nil, err
@@ -581,13 +590,7 @@ func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 	var out []Comment
 	for rows.Next() {
 		var c Comment
-		if err := rows.Scan(
-			&c.MessageID,
-			&c.UserID,
-			&c.UserName,
-			&c.Comment,
-			&c.Timestamp,
-		); err != nil {
+		if err := rows.Scan(&c.MessageID, &c.UserID, &c.Comment, &c.Timestamp); err != nil {
 			return nil, err
 		}
 		out = append(out, c)
@@ -596,6 +599,7 @@ func (db *appdbimpl) ListMessageComments(messageID int) ([]Comment, error) {
 		return nil, err
 	}
 	return out, nil
+
 }
 
 func (db *appdbimpl) SearchUsersByName(query string) ([]User, error) {
