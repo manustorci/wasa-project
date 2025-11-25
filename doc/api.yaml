@@ -77,6 +77,9 @@ paths:
                   type: string
                   description: User's display name 
                   example: "NewName"
+                  pattern: '^.*$'
+                  minLength: 1
+                  maxLength: 64
       responses:
         '200':
           description: Name changed successfully
@@ -129,6 +132,9 @@ paths:
                     type: string
                     description: Sucess message
                     example: "Photo uploaded"
+                    pattern: '^.*$'
+                    minLength: 1   
+                    maxLength: 256 
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -211,10 +217,16 @@ paths:
                       name:
                         type: string
                         description: Name/title of the conversation
+                        pattern: '^.*$'
+                        minLength: 1      
+                        maxLength: 128 
                       lastMessageText:
                         type: string
                         nullable: true
                         description: Snippet of the latest message (if any)
+                        pattern: '^.*$'
+                        minLength: 0   
+                        maxLength: 1000
                       lastMessageAt:
                         type: string
                         format: date-time
@@ -223,7 +235,10 @@ paths:
                       photoUrl:
                         type: string
                         nullable: true
-                        description: Conversation or participant photo URL 
+                        description: Conversation or participant photo URL
+                        pattern: '^.*$'
+                        minLength: 0   
+                        maxLength: 512 
                 example:
                   - id: 2342
                     name: "Chat with Emanuele"
@@ -570,6 +585,8 @@ paths:
                     type: string
                     description: Result of th operation
                     example: "Forwarded"
+                    pattern: '^.*$'
+
         '401':
             $ref: '#/components/responses/Unauthorized'
         '404':
@@ -625,6 +642,10 @@ paths:
                   status:
                     type: string 
                     description: Status of the operation 
+                    pattern: '^.*$'
+                    minLength: 1 
+                    maxLength: 64
+
               example:
                 commentId: 42234
                 status: "ok"
@@ -691,6 +712,9 @@ paths:
                     type: string
                     description: Status of the operation
                     example: "deleted"
+                    pattern: '^.*$'
+                    minLength: 1   
+                    maxLength: 64  
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -742,6 +766,9 @@ paths:
                     type: string 
                     description: Status of the operation
                     example: "Added"
+                    pattern: '^.*$'
+                    minLength: 1   
+                    maxLength: 64  
           
         '401':
             $ref: '#/components/responses/Unauthorized'
@@ -806,7 +833,10 @@ paths:
                 name:
                   type: string
                   description: New group name 
-                  example: "Study group"    
+                  example: "Study group"
+                  pattern: '^.*$'
+                  minLength: 1   
+                  maxLength: 64   
       responses:
         '200':
           description: Group name updated
