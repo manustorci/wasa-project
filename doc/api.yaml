@@ -547,7 +547,7 @@ paths:
           application/json:
             schema:
               type: object
-              description: id of the destionation conversation
+              description: Payload containing the destination conversation ID
               required:
                 - conversationId
               properties:
@@ -844,6 +844,7 @@ paths:
                 photo:
                   type: string 
                   format: binary
+                  description: Group photo file to upload
       parameters:
         - name: id 
           in: path
