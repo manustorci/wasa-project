@@ -163,6 +163,9 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 		return
 	}
 
+	// aggiorna last_read per questo utente
+	_ = rt.db.SetLastRead(uid, convID)
+
 	type commentView struct {
 		UserID   string `json:"userId"`
 		UserName string `json:"userName"`
@@ -170,11 +173,13 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 	}
 
 	type msgView struct {
-		ID        int           `json:"id"`
-		Sender    string        `json:"sender"`
-		Text      string        `json:"text"`
-		Timestamp time.Time     `json:"timestamp"`
-		Comments  []commentView `json:"comments"`
+		ID            int           `json:"id"`
+		Sender        string        `json:"sender"`
+		Text          string        `json:"text"`
+		Timestamp     time.Time     `json:"timestamp"`
+		Comments      []commentView `json:"comments"`
+		ReceivedByAll bool          `json:"received_by_all"`
+		ReadByAll     bool          `json:"read_by_all"`
 	}
 
 	// mappa []database.Message ---> []msgView con username
@@ -202,13 +207,19 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 			})
 		}
 
+		recv, _ := rt.db.IsAllReceived(m.ID)
+		read, _ := rt.db.IsAllRead(m.ID)
+
 		outMsgs = append(outMsgs, msgView{
-			ID:        m.ID,
-			Sender:    senderName,
-			Text:      m.Text,
-			Timestamp: m.Timestamp,
-			Comments:  cv,
+			ID:            m.ID,
+			Sender:        senderName,
+			Text:          m.Text,
+			Timestamp:     m.Timestamp,
+			Comments:      cv,
+			ReceivedByAll: recv,
+			ReadByAll:     read,
 		})
+
 	}
 	resp := struct {
 		ID           int       `json:"id"`
