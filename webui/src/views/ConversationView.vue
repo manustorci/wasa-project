@@ -366,6 +366,17 @@ export default {
         <span><b>{{ m.sender }}</b> — {{ m.text }}</span>
         <div class="d-flex align-items-center">
           <small class="text-muted ms-2">{{ formatDate(m.timestamp) }}</small>
+          <!-- ✓ checkmarks -->
+          <span class="ms-2 text-muted" v-if="m.sender === (localStorage.getItem('identifier') || $store?.state?.user?.id)">
+            <!-- doppio check blu = letto da tutti -->
+            <span v-if="m.read_by_all" style="color:#0095f6">✓✓</span>
+
+            <!-- doppio check grigio = ricevuto da tutti -->
+            <span v-else-if="m.received_by_all">✓✓</span>
+
+            <!-- singolo check = inviato -->
+            <span v-else>✓</span>
+          </span>
 
           <!-- bottone menu ⋯ (sempre visibile) -->
           <div class="position-relative ms-2">
@@ -545,6 +556,17 @@ export default {
 
 
 <style scoped>
+
+.text-muted span {
+  font-weight: bold;
+}
+
+.text-muted span:nth-child(1) {
+  white-space: nowrap;
+}
+
+span[v-cloak] { display:none; }
+
 .dlg-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.15); display:grid; place-items:center; z-index:1000; }
 .dlg{ width:520px; max-width:95vw; }
 
