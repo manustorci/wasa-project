@@ -398,14 +398,20 @@ func (db *appdbimpl) GetMyConversations(userID string) ([]ConversationSummary, e
 		) AS last_ts,
 		CASE
 			WHEN c.is_group = 1 AND TRIM(IFNULL(c.photo,'')) <> '' THEN c.photo
-			ELSE (
-			SELECT u.photo
-			FROM user_conversations uc2
-			JOIN users u ON u.id = uc2.user_id
-			WHERE uc2.conversation_id = c.id AND uc2.user_id <> ?
-			LIMIT 1
+			ELSE NULL
+		END AS photo_url,
+
+		CASE
+			WHEN c.is_group = 0 THEN (
+				SELECT u.photo
+				FROM user_conversations uc2
+				JOIN users u ON u.id = uc2.user_id
+				WHERE uc2.conversation_id = c.id
+				AND uc2.user_id <> ?
+				LIMIT 1
 			)
-		END AS photo_url
+			ELSE NULL
+		END AS other_user_photo
 		FROM conversations c
 		JOIN user_conversations uc ON uc.conversation_id = c.id
 		WHERE uc.user_id = ?
@@ -416,11 +422,18 @@ func (db *appdbimpl) GetMyConversations(userID string) ([]ConversationSummary, e
 		return nil, err
 	}
 	defer rows.Close()
-
 	out := []ConversationSummary{}
 	for rows.Next() {
 		var it ConversationSummary
-		if err := rows.Scan(&it.ID, &it.Name, &it.IsGroup, &it.LastText, &it.LastAtISO, &it.Photo); err != nil {
+		if err := rows.Scan(
+			&it.ID,
+			&it.Name,
+			&it.IsGroup,
+			&it.LastText,
+			&it.LastAtISO,
+			&it.Photo,
+			&it.OtherUserPhoto,
+		); err != nil {
 			return nil, err
 		}
 		out = append(out, it)

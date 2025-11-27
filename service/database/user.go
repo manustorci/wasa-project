@@ -40,13 +40,14 @@ type UserConversation struct {
 }
 
 type ConversationSummary struct {
-	ID        int
-	Name      string
-	Photo     *string
-	IsGroup   bool
-	LastText  *string
-	LastAt    *time.Time
-	LastAtISO *string // mostra ultima attività in lista
+	ID             int
+	Name           string
+	Photo          *string
+	OtherUserPhoto *string
+	IsGroup        bool
+	LastText       *string
+	LastAt         *time.Time
+	LastAtISO      *string
 }
 
 func (db *appdbimpl) GetUserByID(id string) (*User, error) {

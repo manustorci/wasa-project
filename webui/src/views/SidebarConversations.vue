@@ -153,13 +153,16 @@ export default {
         <div class="conv-avatar me-3">
           <!-- se è un gruppo -->
           <template v-if="c.isGroup">
-            <img v-if="photoSrc(c.photoUrl)" :src="photoSrc(c.photoUrl)" alt="" />
+            <img v-if="photoSrc(c.photoUrl)" :src="photoSrc(c.photoUrl)" />
             <div v-else class="conv-fallback">👥</div>
           </template>
 
-          <!-- se NON è un gruppo (dm) -->
+          <!-- se è una DM -->
           <template v-else>
-            <img v-if="photoSrc(c.photoUrl)" :src="photoSrc(c.photoUrl)" alt="" />
+            <img
+              v-if="photoSrc(c.otherUserPhoto)"
+              :src="photoSrc(c.otherUserPhoto)"
+            />
             <div v-else class="conv-fallback">
               {{ (c.name||'?').slice(0,1).toUpperCase() }}
             </div>
