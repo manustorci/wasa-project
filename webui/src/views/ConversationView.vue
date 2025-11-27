@@ -54,6 +54,13 @@ export default {
       }
     }
   },
+  
+  computed: {
+  currentUserId() {
+    return localStorage.getItem("identifier");
+  }
+},
+
 
   methods: {
     logout() {
@@ -363,20 +370,20 @@ export default {
 
       <!-- TESTO MESSAGGIO (sinistra) + ORA (destra) -->
       <div class="d-flex justify-content-between align-items-start">
-        <span><b>{{ m.sender }}</b> — {{ m.text }}</span>
+        <span><b>{{ m.sender }}</b> — {{ m.text || "(no text)" }}</span>
+
         <div class="d-flex align-items-center">
           <small class="text-muted ms-2">{{ formatDate(m.timestamp) }}</small>
           <!-- ✓ checkmarks -->
-          <span class="ms-2 text-muted" v-if="m.sender === (localStorage.getItem('identifier') || $store?.state?.user?.id)">
-            <!-- doppio check blu = letto da tutti -->
-            <span v-if="m.read_by_all" style="color:#0095f6">✓✓</span>
+          <span class="ms-2 text-muted"
+                v-if="m.senderId === currentUserId">
 
-            <!-- doppio check grigio = ricevuto da tutti -->
-            <span v-else-if="m.received_by_all">✓✓</span>
-
-            <!-- singolo check = inviato -->
+            <span v-if="m.readByAll" style="color:#0095f6">✓✓</span>
+            <span v-else-if="m.receivedByAll">✓✓</span>
             <span v-else>✓</span>
+
           </span>
+
 
           <!-- bottone menu ⋯ (sempre visibile) -->
           <div class="position-relative ms-2">

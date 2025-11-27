@@ -175,11 +175,12 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 	type msgView struct {
 		ID            int           `json:"id"`
 		Sender        string        `json:"sender"`
+		SenderID      string        `json:"senderId"`
 		Text          string        `json:"text"`
 		Timestamp     time.Time     `json:"timestamp"`
 		Comments      []commentView `json:"comments"`
-		ReceivedByAll bool          `json:"received_by_all"`
-		ReadByAll     bool          `json:"read_by_all"`
+		ReadByAll     bool          `json:"readByAll"`
+		ReceivedByAll bool          `json:"receivedByAll"`
 	}
 
 	// mappa []database.Message ---> []msgView con username
@@ -213,6 +214,7 @@ func (rt *_router) GetConversation(w http.ResponseWriter, r *http.Request, param
 		outMsgs = append(outMsgs, msgView{
 			ID:            m.ID,
 			Sender:        senderName,
+			SenderID:      m.SenderID,
 			Text:          m.Text,
 			Timestamp:     m.Timestamp,
 			Comments:      cv,
