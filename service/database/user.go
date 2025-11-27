@@ -14,6 +14,8 @@ type Message struct {
 	SenderID       string    `json:"sender_id"`
 	Text           string    `json:"text"`
 	Timestamp      time.Time `json:"timestamp"`
+	ReceivedByAll  bool      `json:"received_by_all"`
+	ReadByAll      bool      `json:"read_by_all"`
 }
 
 type Comment struct {

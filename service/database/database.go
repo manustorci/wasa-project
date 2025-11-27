@@ -71,6 +71,11 @@ type AppDatabase interface {
 
 	SetConversationPhoto(conversationID int, photoPath string) error
 
+	// checkmarks
+	SetLastRead(userID string, conversationID int) error
+	IsAllReceived(messageID int) (bool, error)
+	IsAllRead(messageID int) (bool, error)
+
 	Ping() error
 }
 
@@ -137,17 +142,38 @@ func New(db *sql.DB) (AppDatabase, error) {
 	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user_conversations';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `
-		CREATE TABLE user_conversations (
-			conversation_id INTEGER NOT NULL,
-			user_id TEXT NOT NULL,
-			PRIMARY KEY (conversation_id, user_id),
-			FOREIGN KEY (conversation_id) REFERENCES conversations(id),
-			FOREIGN KEY (user_id) REFERENCES users(id)
-
-		);`
+    CREATE TABLE user_conversations (
+        conversation_id INTEGER NOT NULL,
+        user_id TEXT NOT NULL,
+        time_added DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        last_read DATETIME,
+        PRIMARY KEY (conversation_id, user_id),
+        FOREIGN KEY (conversation_id) REFERENCES conversations(id),
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    );`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating user_conversations table: %w", err)
+		}
+	} else {
+		// time_added if missing
+		var hasTA int
+		err = db.QueryRow(`SELECT 1 FROM pragma_table_info('user_conversations') WHERE name='time_added'`).Scan(&hasTA)
+		if errors.Is(err, sql.ErrNoRows) {
+			_, err = db.Exec(`ALTER TABLE user_conversations ADD COLUMN time_added DATETIME DEFAULT CURRENT_TIMESTAMP`)
+			if err != nil {
+				return nil, fmt.Errorf("adding time_added: %w", err)
+			}
+		}
+
+		// last_read if missing
+		var hasLR int
+		err = db.QueryRow(`SELECT 1 FROM pragma_table_info('user_conversations') WHERE name='last_read'`).Scan(&hasLR)
+		if errors.Is(err, sql.ErrNoRows) {
+			_, err = db.Exec(`ALTER TABLE user_conversations ADD COLUMN last_read DATETIME`)
+			if err != nil {
+				return nil, fmt.Errorf("adding last_read: %w", err)
+			}
 		}
 	}
 
@@ -621,4 +647,81 @@ func (db *appdbimpl) SearchUsersByName(query string) ([]User, error) {
 		users = append(users, u)
 	}
 	return users, nil
+}
+
+func (db *appdbimpl) SetLastRead(userID string, conversationID int) error {
+	_, err := db.c.Exec(`
+        UPDATE user_conversations
+        SET last_read = CURRENT_TIMESTAMP
+        WHERE user_id = ? AND conversation_id = ?`,
+		userID, conversationID)
+	return err
+}
+
+func (db *appdbimpl) IsAllReceived(messageID int) (bool, error) {
+	var convID int
+	var ts string
+
+	err := db.c.QueryRow(`
+        SELECT conversation_id, timestamp
+        FROM messages
+        WHERE id = ?`, messageID).Scan(&convID, &ts)
+	if err != nil {
+		return false, err
+	}
+
+	rows, err := db.c.Query(`
+        SELECT time_added
+        FROM user_conversations
+        WHERE conversation_id = ?`, convID)
+	if err != nil {
+		return false, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var added string
+		if err := rows.Scan(&added); err != nil {
+			return false, err
+		}
+		if ts < added {
+			return false, nil
+		}
+	}
+
+	return true, nil
+}
+
+func (db *appdbimpl) IsAllRead(messageID int) (bool, error) {
+	var convID int
+	var msgTS string
+
+	err := db.c.QueryRow(`
+        SELECT conversation_id, timestamp
+        FROM messages
+        WHERE id = ?`, messageID).Scan(&convID, &msgTS)
+	if err != nil {
+		return false, err
+	}
+
+	rows, err := db.c.Query(`
+        SELECT last_read
+        FROM user_conversations
+        WHERE conversation_id = ?`, convID)
+	if err != nil {
+		return false, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var lr *string
+		if err := rows.Scan(&lr); err != nil {
+			return false, err
+		}
+		if lr == nil || *lr < msgTS {
+			return false, nil
+		}
+	}
+
+	return true, nil
 }
