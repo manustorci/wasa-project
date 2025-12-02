@@ -646,6 +646,11 @@ func (db *appdbimpl) SearchUsersByName(query string) ([]User, error) {
 		}
 		users = append(users, u)
 	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return users, nil
 }
 
