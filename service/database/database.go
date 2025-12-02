@@ -397,13 +397,13 @@ func (db *appdbimpl) GetMyConversations(userID string) ([]ConversationSummary, e
 			LIMIT 1
 		) AS last_ts,
 		CASE
-			WHEN c.is_group = 1 AND TRIM(IFNULL(c.photo,'')) <> '' THEN c.photo
+			WHEN c.is_group = 1 THEN c.photo
 			ELSE (
-			SELECT u.photo
-			FROM user_conversations uc2
-			JOIN users u ON u.id = uc2.user_id
-			WHERE uc2.conversation_id = c.id AND uc2.user_id <> ?
-			LIMIT 1
+				SELECT u.photo
+				FROM user_conversations uc2
+				JOIN users u ON u.id = uc2.user_id
+				WHERE uc2.conversation_id = c.id AND uc2.user_id <> ?
+				LIMIT 1
 			)
 		END AS photo_url
 		FROM conversations c
