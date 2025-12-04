@@ -1,6 +1,9 @@
 <script>
+import LogoutButton from "@/components/LogoutButton.vue";
+
 export default {
   name: "SidebarConversations",
+  components: { LogoutButton },
   data() {
     return {
       items: [],
@@ -136,6 +139,12 @@ export default {
 </script>
 
 <template>
+
+  <!-- LOGOUT IN FONDO -->
+  <div class="mt-auto p-3">
+    <LogoutButton />
+  </div>
+
   <!-- HEADER -->
   <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
     <h2 class="h-mono fs-4 mb-0">Conversations</h2>
@@ -265,4 +274,3 @@ export default {
 .dlg-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.15); display:grid; place-items:center; z-index:1000; }
 .dlg{ width:520px; max-width:95vw; }
 </style>
-

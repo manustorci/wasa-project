@@ -63,11 +63,6 @@ export default {
 
 
   methods: {
-    logout() {
-      localStorage.removeItem("identifier");
-      this.$router.push("/"); // oppure "/login" se hai una route Login
-    },
-
     async forwardNewChat() {
       const msg = this.forwardDlg.msg;
       if (!msg?.id) return;
@@ -353,8 +348,6 @@ export default {
             @change="e => { groupPhotoFile = e.target.files[0]; changeGroupPhoto(); }"
           />
           <button class="link-mono link-mono" :disabled="!isGroup" @click="confirmLeave()">Leave group</button>
-          <button class="link-mono link-mono--danger" @click="logout()">Logout</button>
-
         </div>
       </div>
     </div>
